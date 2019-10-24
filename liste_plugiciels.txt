@@ -1,0 +1,102 @@
+Catalogue de plugins auto-documentés.
+
+0. LookAndFeel de la librairie
+------------------------------
+
+- Design visuel
+
+1. Effets sur le volume du son
+------------------------------
+
+- Volume linéaire
+- Volume en dB
+- Volume + LFO
+
+2. Effets de filtrage
+---------------------
+
+- Passe-bas premier ordre
+- Passe-haut premier ordre
+- Résonateur second ordre
+- Butterworth passe-bas 
+- Butterworth passe-haut 
+- Butterworth passe-bande
+- Butterworth réjecteur de bande
+- Biquad multi-état
+- Filtre d'égalisation
+
+3. Effets de distorsion non-linéaire
+------------------------------------
+
+- Écrêtage
+- Rectification
+- Distorsion arctangente
+- Déformeur d'onde
+- Distorsion complète
+
+4. Effets temporels
+-------------------
+
+- Délai simple
+- Délai avec interpolation
+- Délai avec feedback
+- Délai sans artefact
+- "Flanger"
+- Chorus
+- Échos transposés
+- Harmoniseur
+- "Phaser"
+
+***
+
+5. Effets de panoramisation
+---------------------------
+
+- Pan linéaire
+- Pan logarithmique
+- Balance
+- Effet Doopler
+
+6. Effets sur la dynamique du son
+---------------------------------
+
+- Suiveur d'enveloppe
+- Porte de bruit
+- Compresseur
+- Limiteur
+- Expandeur
+
+7. Effets dans le domaine fréquentiel
+-------------------------------------
+
+- Analyse - resynthèse
+- Filtre FFT
+- Synthèse croisée
+- Délai spectral
+
+***
+
+8. Effets par granulation
+-------------------------
+
+- Étirement - compression
+- Transposition
+- Nuages sonores
+- Gel du son
+
+9. Synthétiseurs virtuels
+-------------------------
+
+- Onde sinusoïdale
+- Enveloppe d'amplitude
+- Forme d'onde variable
+- Oscillateur + LFO
+- 2 oscillateurs, 2 filtres, 2 LFOs
+
+10. Ré-échantillonnage du son
+-----------------------------
+
+- Quantificateur
+- Ré-échantillonneur
+
+***
