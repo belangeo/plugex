@@ -44,6 +44,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 	    echo "=== Compiling" ${dir##*/} "==="   # print everything after the final "/"
 	    cd ${dir}/Builds/MacOSX/
 	    xcodebuild -quiet -configuration Release build
+        cp -r build/Release/*.component ../../../MacOS_x64_binaries/Components
+        cp -r build/Release/*.vst ../../../MacOS_x64_binaries/VST
+        cp -r build/Release/*.vst3 ../../../MacOS_x64_binaries/VST3
 	    cd ../../..
 	done
 
