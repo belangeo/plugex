@@ -29,7 +29,7 @@ void OnePoleLowpass::setup(double sampleRate) {
     m_y1 = 0.0f;
 }
 
-void OnePoleLowpass::setFreq(double freq) {
+void OnePoleLowpass::setFreq(float freq) {
     if (freq != m_freq) {
         m_freq = freq;
         m_coeff = expf(-2.0f * M_PI * m_freq / m_sampleRate);

@@ -11,17 +11,39 @@
 
 #pragma once
 
-class OnePoleLowpass {
+class Biquad {
     public:
-        OnePoleLowpass();
-        ~OnePoleLowpass();
+        Biquad();
+        ~Biquad();
         void setup(double sampleRate);
         void setFreq(float freq);
+        void setQ(float q);
+        void setType(int type);
+        void setParameters(float freq, float q, int type);
+        void computeVariables();
+        void computeCoefficients();
         float process(float input);
 
     private:
         double m_sampleRate;
+        // Parameters
         float m_freq;
-        float m_coeff;
-        float m_y1;
+        float m_q;
+        int m_type;
+        // Variables
+        float w0;
+        float c;
+        float alpha;
+        // Coefficients
+        float a0;
+        float a1;
+        float a2;
+        float b0;
+        float b1;
+        float b2;
+        // Last samples
+        float x1;
+        float x2;
+        float y1;
+        float y2;
 };
