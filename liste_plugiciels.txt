@@ -37,9 +37,7 @@ Catalogue de plugins auto-documentés.
 4. Effets temporels
 -------------------
 
-- Délai simple
-- Délai avec interpolation
-- Délai avec feedback
+- Délai avec interpolation linéaire et feedback
 - Délai sans artefact
 - "Flanger"
 - Chorus
