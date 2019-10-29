@@ -136,10 +136,10 @@ void Plugex_09_butterworthBpAudioProcessor::changeProgramName (int index, const 
 void Plugex_09_butterworthBpAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    memset(lastInputSample1, 0, sizeof(float) * 8);
-    memset(lastInputSample2, 0, sizeof(float) * 8);
-    memset(lastFilteredSample1, 0, sizeof(float) * 8);
-    memset(lastFilteredSample2, 0, sizeof(float) * 8);
+    memset(lastInputSample1, 0, sizeof(float) * 2);
+    memset(lastInputSample2, 0, sizeof(float) * 2);
+    memset(lastFilteredSample1, 0, sizeof(float) * 2);
+    memset(lastFilteredSample2, 0, sizeof(float) * 2);
 
     freqSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     freqSmoothed.setCurrentAndTargetValue(*freqParameter);

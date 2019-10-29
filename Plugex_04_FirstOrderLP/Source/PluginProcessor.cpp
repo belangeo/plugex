@@ -124,7 +124,7 @@ void Plugex_04_firstOrderLpAudioProcessor::changeProgramName (int index, const S
 void Plugex_04_firstOrderLpAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    memset(lastFilteredSample, 0, sizeof(float) * 8);
+    memset(lastFilteredSample, 0, sizeof(float) * 2);
 
     freqSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     freqSmoothed.setCurrentAndTargetValue(*freqParameter);

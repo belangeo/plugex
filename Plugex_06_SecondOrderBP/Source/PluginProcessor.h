@@ -58,10 +58,10 @@ private:
     AudioProcessorValueTreeState parameters;
 
     double currentSampleRate;
-    float lastInputSample1[8];
-    float lastInputSample2[8];
-    float lastFilteredSample1[8];
-    float lastFilteredSample2[8];
+    float lastInputSample1[2];
+    float lastInputSample2[2];
+    float lastFilteredSample1[2];
+    float lastFilteredSample2[2];
 
     float *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;

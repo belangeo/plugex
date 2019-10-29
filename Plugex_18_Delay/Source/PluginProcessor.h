@@ -73,7 +73,7 @@ private:
     float *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
-    std::array<std::unique_ptr<float[]>, 8> delayLine;
+    std::array<std::unique_ptr<float[]>, 2> delayLine;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_18_delayAudioProcessor)
 };

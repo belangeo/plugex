@@ -186,7 +186,7 @@ void Plugex_17_fullDistortionAudioProcessor::prepareToPlay (double sampleRate, i
     balanceSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     balanceSmoothed.setCurrentAndTargetValue(*balanceParameter);
 
-    for (int channel = 0; channel < 8; channel++) {
+    for (int channel = 0; channel < 2; channel++) {
         highpassFilter[channel].setup(sampleRate);
         lowpassFilter[channel].setup(sampleRate);
     }

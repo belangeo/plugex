@@ -152,7 +152,7 @@ void Plugex_18_delayAudioProcessor::prepareToPlay (double sampleRate, int sample
     balanceSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     balanceSmoothed.setCurrentAndTargetValue(*balanceParameter);
 
-    for (int channel = 0; channel < 8; channel++) {
+    for (int channel = 0; channel < 2; channel++) {
         delayLine[channel].reset( new float[static_cast<int>(currentSampleRate) + 1]);
         for (int i = 0; i < static_cast<int>(currentSampleRate) + 1; i++) {
             delayLine[channel][i] = 0.0f;

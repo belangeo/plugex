@@ -138,7 +138,7 @@ void Plugex_13_clippingAudioProcessor::prepareToPlay (double sampleRate, int sam
     cutoffSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     cutoffSmoothed.setCurrentAndTargetValue(*cutoffParameter);
 
-    for (int channel = 0; channel < 8; channel++) {
+    for (int channel = 0; channel < 2; channel++) {
         lowpassFilter[channel].setup(sampleRate);
     }
 }

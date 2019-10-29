@@ -81,8 +81,8 @@ private:
     float *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
-    Biquad highpassFilter[8];
-    Biquad lowpassFilter[8];
+    Biquad highpassFilter[2];
+    Biquad lowpassFilter[2];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_17_fullDistortionAudioProcessor)
 };

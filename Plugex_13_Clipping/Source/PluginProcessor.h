@@ -69,7 +69,7 @@ private:
     float *cutoffParameter = nullptr;
     SmoothedValue<float> cutoffSmoothed;
 
-    OnePoleLowpass lowpassFilter[8];
+    OnePoleLowpass lowpassFilter[2];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_13_clippingAudioProcessor)
 };
