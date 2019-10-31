@@ -11,8 +11,7 @@
 
 #include "DelayLine.h"
 
-DelayLine::DelayLine() {
-}
+DelayLine::DelayLine() {}
 
 DelayLine::~DelayLine() {}
 

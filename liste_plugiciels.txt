@@ -39,11 +39,11 @@ Catalogue de plugins auto-documentés.
 
 - Délai avec interpolation linéaire et feedback
 - Délai sans artefact
-- "Flanger"
+- Flanger
 - Chorus
 - Échos transposés
 - Harmoniseur
-- "Phaser"
+- Phaser
 
 ***
 
