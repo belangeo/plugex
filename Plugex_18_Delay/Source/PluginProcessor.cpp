@@ -224,6 +224,9 @@ void Plugex_18_delayAudioProcessor::processBlock (AudioBuffer<float>& buffer, Mi
             float sampleRead = previous + (next - previous) * readPosFloatPart;
             auto* channelData = buffer.getWritePointer (channel);
             delayLine[channel][writePosition] = channelData[i] + sampleRead * currentFeedback;
+            if (writePosition == 0) {
+                delayLine[channel][currentSampleRate] = delayLine[channel][0];
+            }
             channelData[i] = channelData[i] + (sampleRead - channelData[i]) * currentBalance;
         }
         if (writePosition++ == currentSampleRate) {
