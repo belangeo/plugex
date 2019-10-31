@@ -41,7 +41,6 @@ Catalogue de plugins auto-documentés.
 - Délai sans artefact
 - Flanger
 - Chorus
-- Échos transposés
 - Harmoniseur
 - Phaser
 
