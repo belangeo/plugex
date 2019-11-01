@@ -9,6 +9,7 @@
 *
 *******************************************************************************/
 
+#include <algorithm>
 #include "DelayLine.h"
 
 DelayLine::DelayLine() {}
