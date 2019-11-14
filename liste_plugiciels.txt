@@ -49,8 +49,7 @@ Catalogue de plugins auto-documentés.
 5. Effets de panoramisation
 ---------------------------
 
-- Pan linéaire
-- Pan logarithmique
+- Pan linéaire/sqrt/cosinus
 - Balance
 - Effet Doopler
 
