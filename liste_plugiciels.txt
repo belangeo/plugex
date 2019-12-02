@@ -7,6 +7,7 @@ Catalogue de plugins auto-documentés.
 
 1. Effets sur le volume du son
 ------------------------------
+(blue)
 
 - Volume linéaire
 - Volume en dB
@@ -14,6 +15,7 @@ Catalogue de plugins auto-documentés.
 
 2. Effets de filtrage
 ---------------------
+(green)
 
 - Passe-bas premier ordre
 - Passe-haut premier ordre
@@ -27,6 +29,7 @@ Catalogue de plugins auto-documentés.
 
 3. Effets de distorsion non-linéaire
 ------------------------------------
+(red)
 
 - Écrêtage
 - Rectification
@@ -36,6 +39,7 @@ Catalogue de plugins auto-documentés.
 
 4. Effets temporels
 -------------------
+(orange)
 
 - Délai avec interpolation linéaire et feedback
 - Délai sans artefact
@@ -48,6 +52,7 @@ Catalogue de plugins auto-documentés.
 
 5. Effets de panoramisation
 ---------------------------
+(purple)
 
 - Pan linéaire/sqrt/cosinus
 - Balance
@@ -55,8 +60,9 @@ Catalogue de plugins auto-documentés.
 
 6. Effets sur la dynamique du son
 ---------------------------------
+(grey)
 
-- Suiveur d'enveloppe
+- Suiveur d'enveloppe (auto-wah)
 - Porte de bruit
 - Compresseur
 - Limiteur
