@@ -65,7 +65,6 @@ Catalogue de plugins auto-documentés.
 - Suiveur d'enveloppe (auto-wah)
 - Porte de bruit
 - Compresseur
-- Limiteur
 - Expandeur
 
 7. Effets dans le domaine fréquentiel

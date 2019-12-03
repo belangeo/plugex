@@ -24,6 +24,14 @@ static float threshSliderTextToValue(const String& text) {
     return text.getFloatValue();
 }
 
+static String ratioSliderValueToText(float value) {
+    return String(value, 2) + String(" x");
+}
+
+static float ratioSliderTextToValue(const String& text) {
+    return text.getFloatValue();
+}
+
 static String risetimeSliderValueToText(float value) {
     return String(value, 2) + String(" ms");
 }
@@ -46,16 +54,20 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
     std::vector<std::unique_ptr<Parameter>> parameters;
 
     parameters.push_back(std::make_unique<Parameter>(String("thresh"), String("Tresh"), String(),
-                                                     NormalisableRange<float>(-90.0f, 0.0f, 0.01f, 1.0f),
-                                                     -60.0f, threshSliderValueToText, threshSliderTextToValue));
+                                                     NormalisableRange<float>(-60.0f, 0.0f, 0.01f, 1.0f),
+                                                     -20.0f, threshSliderValueToText, threshSliderTextToValue));
+
+    parameters.push_back(std::make_unique<Parameter>(String("ratio"), String("Ratio"), String(),
+                                                     NormalisableRange<float>(1.0f, 20.0f, 0.01f, 0.3f),
+                                                     2.0f, ratioSliderValueToText, ratioSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("risetime"), String("Risetime"), String(),
                                                      NormalisableRange<float>(0.01f, 500.0f, 0.01f, 0.3f),
-                                                     5.0f, risetimeSliderValueToText, risetimeSliderTextToValue));
+                                                     10.0f, risetimeSliderValueToText, risetimeSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("falltime"), String("Falltime"), String(),
                                                      NormalisableRange<float>(0.01f, 500.0f, 0.01f, 0.3f),
-                                                     10.0f, risetimeSliderValueToText, risetimeSliderTextToValue));
+                                                     100.0f, risetimeSliderValueToText, risetimeSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("lookahead"), String("LookAhead"), String(),
                                                      NormalisableRange<float>(0.01f, 10.0f, 0.01f, 1.0f),
@@ -65,7 +77,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
 }
 
 //==============================================================================
-Plugex_28_gateAudioProcessor::Plugex_28_gateAudioProcessor()
+Plugex_29_compressorAudioProcessor::Plugex_29_compressorAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -79,22 +91,23 @@ Plugex_28_gateAudioProcessor::Plugex_28_gateAudioProcessor()
     parameters (*this, nullptr, Identifier(JucePlugin_Name), createParameterLayout())
 {
     threshParameter = parameters.getRawParameterValue("thresh");
+    ratioParameter = parameters.getRawParameterValue("ratio");
     risetimeParameter = parameters.getRawParameterValue("risetime");
     falltimeParameter = parameters.getRawParameterValue("falltime");
     lookaheadParameter = parameters.getRawParameterValue("lookahead");
 }
 
-Plugex_28_gateAudioProcessor::~Plugex_28_gateAudioProcessor()
+Plugex_29_compressorAudioProcessor::~Plugex_29_compressorAudioProcessor()
 {
 }
 
 //==============================================================================
-const String Plugex_28_gateAudioProcessor::getName() const
+const String Plugex_29_compressorAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool Plugex_28_gateAudioProcessor::acceptsMidi() const
+bool Plugex_29_compressorAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -103,7 +116,7 @@ bool Plugex_28_gateAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool Plugex_28_gateAudioProcessor::producesMidi() const
+bool Plugex_29_compressorAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -112,7 +125,7 @@ bool Plugex_28_gateAudioProcessor::producesMidi() const
    #endif
 }
 
-bool Plugex_28_gateAudioProcessor::isMidiEffect() const
+bool Plugex_29_compressorAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -121,42 +134,45 @@ bool Plugex_28_gateAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double Plugex_28_gateAudioProcessor::getTailLengthSeconds() const
+double Plugex_29_compressorAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int Plugex_28_gateAudioProcessor::getNumPrograms()
+int Plugex_29_compressorAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int Plugex_28_gateAudioProcessor::getCurrentProgram()
+int Plugex_29_compressorAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void Plugex_28_gateAudioProcessor::setCurrentProgram (int index)
+void Plugex_29_compressorAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String Plugex_28_gateAudioProcessor::getProgramName (int index)
+const String Plugex_29_compressorAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void Plugex_28_gateAudioProcessor::changeProgramName (int index, const String& newName)
+void Plugex_29_compressorAudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void Plugex_28_gateAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void Plugex_29_compressorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
+    follower[0] = follower[1] = 0.0f;
 
     threshSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     threshSmoothed.setCurrentAndTargetValue(*threshParameter);
+    ratioSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
+    ratioSmoothed.setCurrentAndTargetValue(*ratioParameter);
     risetimeSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     risetimeSmoothed.setCurrentAndTargetValue(*risetimeParameter);
     falltimeSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
@@ -165,20 +181,18 @@ void Plugex_28_gateAudioProcessor::prepareToPlay (double sampleRate, int samples
     lookaheadSmoothed.setCurrentAndTargetValue(*lookaheadParameter);
 
     for (int channel = 0; channel < 2; channel++) {
-        lowpassFilter[channel].setup(currentSampleRate);
-        gateFilter[channel].setup(currentSampleRate);
         lookaheadDelay[channel].setup(0.015, currentSampleRate);
     }
 }
 
-void Plugex_28_gateAudioProcessor::releaseResources()
+void Plugex_29_compressorAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool Plugex_28_gateAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool Plugex_29_compressorAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
@@ -201,7 +215,7 @@ bool Plugex_28_gateAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 }
 #endif
 
-void Plugex_28_gateAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void Plugex_29_compressorAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -211,59 +225,86 @@ void Plugex_28_gateAudioProcessor::processBlock (AudioBuffer<float>& buffer, Mid
         buffer.clear (i, 0, buffer.getNumSamples());
 
     threshSmoothed.setTargetValue(*threshParameter);
+    ratioSmoothed.setTargetValue(*ratioParameter);
     risetimeSmoothed.setTargetValue(*risetimeParameter);
     falltimeSmoothed.setTargetValue(*falltimeParameter);
     lookaheadSmoothed.setTargetValue(*lookaheadParameter);
 
     for (int i = 0; i < buffer.getNumSamples(); i++)
     {
-        float thresh = powf(10.0f, threshSmoothed.getNextValue() * 0.05f);
+        float thresh = threshSmoothed.getNextValue();
+        float ratio = ratioSmoothed.getNextValue();
         float risetime = risetimeSmoothed.getNextValue() * 0.001f;
         float falltime = falltimeSmoothed.getNextValue() * 0.001f;
         float lookahead = lookaheadSmoothed.getNextValue() * 0.001f;
 
+        ratio = 1.0f / ratio;
+        risetime = expf(-1.0f / (currentSampleRate * risetime));
+        falltime = expf(-1.0f / (currentSampleRate * falltime));
+        float knee = 0.5f;                                                      /* 0.001 = hard knee, 1 = soft knee */
+        thresh += 3.0f * knee;
+        if (thresh > 0.0)
+            thresh = 0.0;
+        float ampthresh = powf(10.0f, thresh * 0.05f);                          /* up to 3 dB above threshold */
+        float kneethresh = powf(10.0f, (thresh - (knee * 8.5f + 0.5f)) * 0.05); /* up to 6 dB under threshold */
+        float invKneeRange = 1.0f / (ampthresh - kneethresh);
+
         for (int channel = 0; channel < totalNumInputChannels; ++channel) {
             auto* channelData = buffer.getWritePointer (channel);
-            float rectified = channelData[i] < 0.0f ? -channelData[i] : channelData[i];
-            lowpassFilter[channel].setFreq(10.0f);
-            float follower = lowpassFilter[channel].process(rectified);
 
-            float gate;
-            if (follower >= thresh) {
-                gateFilter[channel].setFreq(1.0f / risetime);
-                gate = gateFilter[channel].process(1.0f);
+            /* Envelope follower */
+            float rectified = channelData[i] < 0.0f ? -channelData[i] : channelData[i];
+            if (follower[channel] < rectified) {
+                follower[channel] = rectified + risetime * (follower[channel] - rectified);
             } else {
-                gateFilter[channel].setFreq(1.0f / falltime);
-                gate = gateFilter[channel].process(0.0f);
+                follower[channel] = rectified + falltime * (follower[channel] - rectified);
             }
 
+            /* Look ahead */
             float delayedSample = lookaheadDelay[channel].read(lookahead);
             lookaheadDelay[channel].write(channelData[i]);
-            channelData[i] = delayedSample * gate;
+
+            /* Compress signal */
+            float outAmplitude = 1.0f;
+            if (follower[channel] > ampthresh) {                          /* Above threshold */
+                float indb = 20.0f * log10f(follower[channel] + 1.0e-20);
+                float diff = indb - thresh;
+                float outdb = diff - diff * ratio;
+                outAmplitude = powf(10.0f, -outdb * 0.05f);
+            } else if (follower[channel] > kneethresh) {                  /* Under the knee */
+                float kneescl = (follower[channel] - kneethresh) * invKneeRange;
+                float kneeratio = (((knee + 1.0f) * kneescl) / (knee + kneescl)) * (ratio - 1.0f) + 1.0f;
+                float indb = 20.0f * log10f(follower[channel] + 1.0e-20);
+                float diff = indb - thresh;
+                float outdb = diff - diff * kneeratio;
+                outAmplitude = powf(10.0f, -outdb * 0.05f);
+            }
+            outAmplitude = outAmplitude < 1.0e-20 ? 1.0e-20 : outAmplitude > 1.0f ? 1.0f : outAmplitude;
+            channelData[i] = delayedSample * outAmplitude;
         }
     }
 }
 
 //==============================================================================
-bool Plugex_28_gateAudioProcessor::hasEditor() const
+bool Plugex_29_compressorAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* Plugex_28_gateAudioProcessor::createEditor()
+AudioProcessorEditor* Plugex_29_compressorAudioProcessor::createEditor()
 {
-    return new Plugex_28_gateAudioProcessorEditor (*this, parameters);
+    return new Plugex_29_compressorAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
-void Plugex_28_gateAudioProcessor::getStateInformation (MemoryBlock& destData)
+void Plugex_29_compressorAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void Plugex_28_gateAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void Plugex_29_compressorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -273,5 +314,5 @@ void Plugex_28_gateAudioProcessor::setStateInformation (const void* data, int si
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new Plugex_28_gateAudioProcessor();
+    return new Plugex_29_compressorAudioProcessor();
 }
