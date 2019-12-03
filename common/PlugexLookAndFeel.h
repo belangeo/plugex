@@ -30,12 +30,13 @@ public:
     // Méthode permettant de changer le thème visuel du plugiciel. Les différents thèmes
     // se différencient par leur couleur dominante.
     bool setTheme(String newTheme) {
-        const StringArray themes = StringArray("blue", "grey", "red", "green", "orange", "purple");
+        const StringArray themes = StringArray("blue", "green", "red", "orange", "purple", "grey", "yellow",
+                                               "lightblue", "lightgreen", "pink");
         if (! themes.contains(newTheme)) {
             return false;
         }
 
-        Colour darktheme, lighttheme;
+        //Colour darktheme, lighttheme;
         Colour light = Colour(212, 211, 224);
 
         if (newTheme == "blue") {
@@ -56,6 +57,18 @@ public:
         } else if (newTheme == "purple") {
             darktheme = Colour(48, 6, 54);
             lighttheme = Colour(190, 25, 212);
+        } else if (newTheme == "yellow") {
+            darktheme = Colour(69, 68, 13);
+            lighttheme = Colour(189, 186, 36);
+        } else if (newTheme == "lightblue") {
+            darktheme = Colour(13, 69, 65);
+            lighttheme = Colour(33, 184, 174);
+        } else if (newTheme == "lightgreen") {
+            darktheme = Colour(39, 56, 5);
+            lighttheme = Colour(120, 171, 17);
+        } else if (newTheme == "pink") {
+            darktheme = Colour(56, 6, 40);
+            lighttheme = Colour(184, 18, 131);
         }
 
         // Fenêtre principale.
@@ -99,6 +112,18 @@ public:
         setColour(ToggleButton::tickDisabledColourId, lighttheme.withAlpha(0.25f));
 
         return true;
+    }
+
+    Colour getDarkTheme() {
+        return darktheme;
+    }
+
+    Colour getLightTheme() {
+        return lighttheme;
+    }
+
+    Colour getLightFadeTheme() {
+        return lighttheme.withAlpha(0.25f);
     }
 
     // Redéfinition de la méthode pour dessiner un potentiomètre en forme de bouton rond (knob).
@@ -323,4 +348,8 @@ public:
             g.fillRect(tickBounds.reduced(4.0f, 4.0f));
         }
     }
+
+private:
+    Colour darktheme;
+    Colour lighttheme;
 };

@@ -14,8 +14,10 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 #include "PlugexLookAndFeel.h"
+#include "MultiSlider.h"
 
-class Plugex_00_visualDesignAudioProcessorEditor  : public AudioProcessorEditor
+class Plugex_00_visualDesignAudioProcessorEditor  : public AudioProcessorEditor,
+                                                    public MultiSlider::Listener
 {
 public:
     Plugex_00_visualDesignAudioProcessorEditor (Plugex_00_visualDesignAudioProcessor&);
@@ -23,6 +25,8 @@ public:
 
     void paint (Graphics&) override;
     void resized() override;
+
+    void multiSliderChanged(const std::vector<float> &value) override;
 
 private:
     Plugex_00_visualDesignAudioProcessor& processor;
@@ -40,6 +44,8 @@ private:
     TextButton button1;
     TextButton button2;
     ToggleButton toggle;
+    Label multiSliderLabel;
+    MultiSlider multiSlider;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_00_visualDesignAudioProcessorEditor)
 };

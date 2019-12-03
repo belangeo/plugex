@@ -16,10 +16,10 @@
 Plugex_00_visualDesignAudioProcessorEditor::Plugex_00_visualDesignAudioProcessorEditor (Plugex_00_visualDesignAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
-    setSize (400, 500);
+    setSize (400, 600);
 
     setLookAndFeel(&plugexLookAndFeel);
-    plugexLookAndFeel.setTheme("blue");
+    plugexLookAndFeel.setTheme("pink");
 
     title.setText("Plugex - common LookAndFeel !", NotificationType::dontSendNotification);
     title.setFont(title.getFont().withPointHeight(title.getFont().getHeightInPoints() + 4));
@@ -74,11 +74,20 @@ Plugex_00_visualDesignAudioProcessorEditor::Plugex_00_visualDesignAudioProcessor
     toggle.setLookAndFeel(&plugexLookAndFeel);
     toggle.setButtonText("Toggle button");
     addAndMakeVisible(&toggle);
-    
+
+    multiSliderLabel.setText("This is a MultiSlider widget !", NotificationType::dontSendNotification);
+    addAndMakeVisible(&multiSliderLabel);
+    multiSlider.addListener(this);
+    multiSlider.setLookAndFeel(&plugexLookAndFeel);
+    addAndMakeVisible(&multiSlider);
 }
 
 Plugex_00_visualDesignAudioProcessorEditor::~Plugex_00_visualDesignAudioProcessorEditor()
 {
+}
+
+void Plugex_00_visualDesignAudioProcessorEditor::multiSliderChanged(const std::vector<float> &value) {
+    std::cout << "Vector size = " << value.size() << std::endl;
 }
 
 //==============================================================================
@@ -120,4 +129,7 @@ void Plugex_00_visualDesignAudioProcessorEditor::resized()
     button2.setBounds(area.removeFromTop(24));
     area.removeFromTop(12);
     toggle.setBounds(area.removeFromTop(24));
+    area.removeFromTop(12);
+    multiSliderLabel.setBounds(area.removeFromTop(20));
+    multiSlider.setBounds(area.withSizeKeepingCentre(width-20, 100));
 }

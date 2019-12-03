@@ -5,6 +5,8 @@
               headerPath="../../../common" companyName="belangeo">
   <MAINGROUP id="DEp4Vn" name="Plugex00VisualDesign">
     <GROUP id="{DA554DF8-43AE-456B-E5AB-BF6545F4B67D}" name="Source">
+      <FILE id="izELjC" name="MultiSlider.cpp" compile="1" resource="0" file="../common/MultiSlider.cpp"/>
+      <FILE id="sRTK3q" name="MultiSlider.h" compile="0" resource="0" file="../common/MultiSlider.h"/>
       <FILE id="qmlCaK" name="PlugexLookAndFeel.h" compile="0" resource="0"
             file="../common/PlugexLookAndFeel.h"/>
       <FILE id="ZeY25d" name="PluginProcessor.cpp" compile="1" resource="0"

@@ -70,7 +70,7 @@ Catalogue de plugins auto-documentés.
 7. Effets dans le domaine fréquentiel
 -------------------------------------
 
-- Analyse - resynthèse
+- Analyse - resynthèse ( dans la categorie _00_ )
 - Filtre FFT
 - Synthèse croisée
 - Délai spectral
