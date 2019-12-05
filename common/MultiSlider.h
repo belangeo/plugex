@@ -20,16 +20,20 @@ public:
     MultiSlider();
     ~MultiSlider();
 
+    void setup(int numberOfPoints);
+
     void paint(Graphics&) override;
     void resized() override;
 
 	void mouseDown (const MouseEvent &event);
  	void mouseDrag (const MouseEvent &event);
 
+    void setPoints(const Array<float> &points);
+
     struct Listener
     {
         virtual ~Listener() {}
-        virtual void multiSliderChanged(const std::vector<float> &value) = 0;
+        virtual void multiSliderChanged(const Array<float> &value) = 0;
     };
 
     void addListener(Listener* l) { listeners.add (l); }
@@ -38,11 +42,9 @@ public:
 private:
     ListenerList<Listener> listeners;
 
-    bool initialized;
-
     Point<int> lastPosition;
 
-    std::vector<float> bars;
+    Array<float> bars;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiSlider)
 };

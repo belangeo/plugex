@@ -11,25 +11,20 @@
 
 #include "MultiSlider.h"
 
-MultiSlider::MultiSlider() {
-    lastPosition.setXY(0, 0);
-    initialized = false;
-}
+MultiSlider::MultiSlider() {}
 
 MultiSlider::~MultiSlider() {
     setLookAndFeel(nullptr);
 }
 
+void MultiSlider::setup(int numberOfPoints) {
+    lastPosition.setXY(0, 0);
+    bars.resize(numberOfPoints);
+}
+
 void MultiSlider::paint(Graphics& g) {
     int width = getWidth();
     int height = getHeight();
-
-    if (! initialized) {
-        initialized = true;
-        for (int i = 0; i < width; i++) {
-            bars.push_back(0.0f);
-        }
-    }
 
     PlugexLookAndFeel *lookAndFeel;
     lookAndFeel = static_cast<PlugexLookAndFeel *> (&getLookAndFeel());
@@ -45,8 +40,18 @@ void MultiSlider::paint(Graphics& g) {
 }
 
 void MultiSlider::resized() {
-    bars.clear();
-    initialized = false;
+    // Maybe we should use bars.resize() for the case where the size of the multislider change.
+    // But that implies that the processor is aware of this change in size...
+}
+
+void MultiSlider::setPoints(const Array<float> &points) {
+    for (int i = 0; i < points.size(); i++) {
+        bars.set(i, points[i]);
+    }
+
+    repaint();
+
+    listeners.call([&] (Listener& l) { l.multiSliderChanged(bars); });
 }
 
 void MultiSlider::mouseDown(const MouseEvent &event) {
@@ -54,7 +59,7 @@ void MultiSlider::mouseDown(const MouseEvent &event) {
 
     lastPosition.setXY(event.x, event.y);
 
-    bars[lastPosition.x] = (height - event.y) / (float)height;
+    bars.set(lastPosition.x, (height - event.y) / (float)height);
 
     listeners.call([&] (Listener& l) { l.multiSliderChanged(bars); });
 
@@ -78,7 +83,7 @@ void MultiSlider::mouseDrag(const MouseEvent &event) {
     int direction = lastX < newX ? 1 : -1;
 
     for (int i = 0; i < steps; i++) {
-        bars[lastX+i*direction] = (height - (y1 + diff)) / (float)height;
+        bars.set(lastX+i*direction, (height - (y1 + diff)) / (float)height);
     } 
 
     lastPosition.setXY(newX, newY);

@@ -30,7 +30,7 @@ public:
     // Méthode permettant de changer le thème visuel du plugiciel. Les différents thèmes
     // se différencient par leur couleur dominante.
     bool setTheme(String newTheme) {
-        const StringArray themes = StringArray("blue", "green", "red", "orange", "purple", "grey", "yellow",
+        const StringArray themes = StringArray("blue", "green", "red", "orange", "purple", "grey", "steal",
                                                "lightblue", "lightgreen", "pink");
         if (! themes.contains(newTheme)) {
             return false;
@@ -57,9 +57,9 @@ public:
         } else if (newTheme == "purple") {
             darktheme = Colour(48, 6, 54);
             lighttheme = Colour(190, 25, 212);
-        } else if (newTheme == "yellow") {
-            darktheme = Colour(69, 68, 13);
-            lighttheme = Colour(189, 186, 36);
+        } else if (newTheme == "steal") {
+            darktheme = Colour(35, 46, 54);
+            lighttheme = Colour(118, 154, 181);
         } else if (newTheme == "lightblue") {
             darktheme = Colour(13, 69, 65);
             lighttheme = Colour(33, 184, 174);
