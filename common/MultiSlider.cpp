@@ -34,6 +34,7 @@ void MultiSlider::paint(Graphics& g) {
     g.setColour(lookAndFeel->getLightTheme());
     g.drawRect(0, 0, width, height);
 
+    g.setColour(lookAndFeel->getLightTheme().withAlpha(0.5f));
     for (int i = 0; i < width; i++) {
         g.drawVerticalLine(i, height - height * bars[i], height);
     }
@@ -51,30 +52,30 @@ void MultiSlider::setPoints(const Array<float> &points) {
 
     repaint();
 
-    listeners.call([&] (Listener& l) { l.multiSliderChanged(bars); });
+    listeners.call([&] (Listener& l) { l.multiSliderChanged(this, bars); });
 }
 
 void MultiSlider::mouseDown(const MouseEvent &event) {
-    int height = getHeight();
+    int height = getHeight() - 1;
 
     lastPosition.setXY(event.x, event.y);
 
     bars.set(lastPosition.x, (height - event.y) / (float)height);
 
-    listeners.call([&] (Listener& l) { l.multiSliderChanged(bars); });
+    listeners.call([&] (Listener& l) { l.multiSliderChanged(this, bars); });
 
     repaint();
 }
 
 void MultiSlider::mouseDrag(const MouseEvent &event) {    
     int width = getWidth();
-    int height = getHeight();
+    int height = getHeight() - 1;
 
     int lastX = lastPosition.x < 0 ? 0 : lastPosition.x >= width ? width - 1 : lastPosition.x;
-    int lastY = lastPosition.y < 0 ? 0 : lastPosition.y >= height ? height - 1 : lastPosition.y;
+    int lastY = lastPosition.y < 0 ? 0 : lastPosition.y > height ? height : lastPosition.y;
 
     int newX = event.x < 0 ? 0 : event.x >= width ? width - 1 : event.x;
-    int newY = event.y < 0 ? 0 : event.y >= height ? height - 1 : event.y;
+    int newY = event.y < 0 ? 0 : event.y > height ? height : event.y;
 
     float y1 = (float)lastY;
     float y2 = (float)newY;
@@ -88,7 +89,7 @@ void MultiSlider::mouseDrag(const MouseEvent &event) {
 
     lastPosition.setXY(newX, newY);
 
-    listeners.call([&] (Listener& l) { l.multiSliderChanged(bars); });
+    listeners.call([&] (Listener& l) { l.multiSliderChanged(this, bars); });
 
     repaint();
 }

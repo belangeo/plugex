@@ -16,13 +16,13 @@
 #include "PlugexLookAndFeel.h"
 #include "MultiSlider.h"
 
-class Plugex_31_fftFilterAudioProcessorEditor  : public AudioProcessorEditor,
+class Plugex_32_spectralDelayAudioProcessorEditor  : public AudioProcessorEditor,
                                                  public MultiSlider::Listener,
                                                  public Timer
 {
 public:
-    Plugex_31_fftFilterAudioProcessorEditor (Plugex_31_fftFilterAudioProcessor&, AudioProcessorValueTreeState& vts);
-    ~Plugex_31_fftFilterAudioProcessorEditor();
+    Plugex_32_spectralDelayAudioProcessorEditor (Plugex_32_spectralDelayAudioProcessor&, AudioProcessorValueTreeState& vts);
+    ~Plugex_32_spectralDelayAudioProcessorEditor();
 
     void paint (Graphics&) override;
     void resized() override;
@@ -31,7 +31,7 @@ public:
     void multiSliderChanged(MultiSlider *multiSlider, const Array<float> &value) override;
 
 private:
-    Plugex_31_fftFilterAudioProcessor& processor;
+    Plugex_32_spectralDelayAudioProcessor& processor;
 
     PlugexLookAndFeel plugexLookAndFeel;
 
@@ -51,8 +51,11 @@ private:
     ComboBox wintypeCombo;
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> wintypeAttachment;
 
-    Label  filterLabel;
-    MultiSlider filterMultiSlider;
+    Label  delayLabel;
+    MultiSlider delayMultiSlider;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_31_fftFilterAudioProcessorEditor)
+    Label  feedbackLabel;
+    MultiSlider feedbackMultiSlider;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_32_spectralDelayAudioProcessorEditor)
 };

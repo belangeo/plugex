@@ -33,7 +33,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
 }
 
 //==============================================================================
-Plugex_31_fftFilterAudioProcessor::Plugex_31_fftFilterAudioProcessor()
+Plugex_32_spectralDelayAudioProcessor::Plugex_32_spectralDelayAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -54,34 +54,44 @@ Plugex_31_fftFilterAudioProcessor::Plugex_31_fftFilterAudioProcessor()
     lastOverlaps = 1 << (int)*overlapsParameter;
     lastWintype = (int)*overlapsParameter;
 
-    ValueTree filterNode(Identifier("filterSavedPoints"));
-    for (int i = 0; i < filterNumberOfPoints; i++) {
-        filterNode.setProperty(Identifier(String(i)), 0.0f, nullptr);
+    ValueTree delayNode(Identifier("delaySavedPoints"));
+    for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+        delayNode.setProperty(Identifier(String(i)), 0.0f, nullptr);
     }
-    parameters.state.addChild(filterNode, -1, nullptr);
+    parameters.state.addChild(delayNode, -1, nullptr);
+
+    ValueTree feedbackNode(Identifier("feedbackSavedPoints"));
+    for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+        feedbackNode.setProperty(Identifier(String(i)), 0.0f, nullptr);
+    }
+    parameters.state.addChild(feedbackNode, -1, nullptr);
 
     for (auto channel = 0; channel < 2; channel++) {
         fftEngine[channel].setup(lastOrder, 1 << lastOverlaps, lastWintype);
         fftEngine[channel].addListener(this);
     }
 
-    zeromem (fftFilter, sizeof (fftFilter));
+    zeromem (fftDelay, sizeof (fftDelay));
+    zeromem (fftFeedback, sizeof (fftFeedback));
 
-    fftFilterPoints.resize(filterNumberOfPoints);
-    fftFilterPoints.fill(0.0f);
+    delayPoints.resize(multiSliderNumberOfPoints);
+    delayPoints.fill(0.0f);
+
+    feedbackPoints.resize(multiSliderNumberOfPoints);
+    feedbackPoints.fill(0.0f);
 }
 
-Plugex_31_fftFilterAudioProcessor::~Plugex_31_fftFilterAudioProcessor()
+Plugex_32_spectralDelayAudioProcessor::~Plugex_32_spectralDelayAudioProcessor()
 {
 }
 
 //==============================================================================
-const String Plugex_31_fftFilterAudioProcessor::getName() const
+const String Plugex_32_spectralDelayAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool Plugex_31_fftFilterAudioProcessor::acceptsMidi() const
+bool Plugex_32_spectralDelayAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -90,7 +100,7 @@ bool Plugex_31_fftFilterAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool Plugex_31_fftFilterAudioProcessor::producesMidi() const
+bool Plugex_32_spectralDelayAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -99,7 +109,7 @@ bool Plugex_31_fftFilterAudioProcessor::producesMidi() const
    #endif
 }
 
-bool Plugex_31_fftFilterAudioProcessor::isMidiEffect() const
+bool Plugex_32_spectralDelayAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -108,50 +118,52 @@ bool Plugex_31_fftFilterAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double Plugex_31_fftFilterAudioProcessor::getTailLengthSeconds() const
+double Plugex_32_spectralDelayAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int Plugex_31_fftFilterAudioProcessor::getNumPrograms()
+int Plugex_32_spectralDelayAudioProcessor::getNumPrograms()
 {
 return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int Plugex_31_fftFilterAudioProcessor::getCurrentProgram()
+int Plugex_32_spectralDelayAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void Plugex_31_fftFilterAudioProcessor::setCurrentProgram (int index)
+void Plugex_32_spectralDelayAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String Plugex_31_fftFilterAudioProcessor::getProgramName (int index)
+const String Plugex_32_spectralDelayAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void Plugex_31_fftFilterAudioProcessor::changeProgramName (int index, const String& newName)
+void Plugex_32_spectralDelayAudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void Plugex_31_fftFilterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void Plugex_32_spectralDelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    currentSampleRate = sampleRate;
+    resizeBuffers(lastOrder, lastOverlaps);
 }
 
-void Plugex_31_fftFilterAudioProcessor::releaseResources()
+void Plugex_32_spectralDelayAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool Plugex_31_fftFilterAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool Plugex_32_spectralDelayAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
@@ -174,38 +186,80 @@ bool Plugex_31_fftFilterAudioProcessor::isBusesLayoutSupported (const BusesLayou
 }
 #endif
 
-void Plugex_31_fftFilterAudioProcessor::computeFFTFilter() {
+void Plugex_32_spectralDelayAudioProcessor::resizeBuffers(int order, int overlaps) {
+    int fftSize = 1 << order;
+    int hopsize = fftSize / overlaps;
+    currentNumberOfFrames = (int)(maxDelayTimeInSeconds * currentSampleRate / hopsize + 0.5f);
+    sampleBuffers[0].resize(currentNumberOfFrames * fftSize);
+    frameCount[0] = frameCount[1] = 0;
+}
+
+void Plugex_32_spectralDelayAudioProcessor::computeFFTDelay() {
     int filterSize = fftEngine[0].getSize() / 2 + 1;
     for (int i = 0; i < filterSize; i++) {
-        float index = sinf(i / (float)filterSize * M_PI / 2.0f) * filterNumberOfPoints;
+        float index = sinf(i / (float)filterSize * M_PI / 2.0f) * multiSliderNumberOfPoints;
         int ipart = (int)index;
         float fpart = index - ipart;
-        fftFilter[i] = fftFilterPoints[ipart] + (fftFilterPoints[ipart+1] - fftFilterPoints[ipart]) * fpart;
+        fftDelay[i] = delayPoints[ipart] + (delayPoints[ipart+1] - delayPoints[ipart]) * fpart;
     }
 }
 
-void Plugex_31_fftFilterAudioProcessor::setFFTFilterPoints(const Array<float> &value) {
-    for (int i = 0; i < filterNumberOfPoints; i++) {
-        fftFilterPoints.set(i, value[i]);
+void Plugex_32_spectralDelayAudioProcessor::computeFFTFeedback() {
+    int filterSize = fftEngine[0].getSize() / 2 + 1;
+    for (int i = 0; i < filterSize; i++) {
+        float index = sinf(i / (float)filterSize * M_PI / 2.0f) * multiSliderNumberOfPoints;
+        int ipart = (int)index;
+        float fpart = index - ipart;
+        fftFeedback[i] = feedbackPoints[ipart] + (feedbackPoints[ipart+1] - feedbackPoints[ipart]) * fpart;
     }
-
-    ValueTree filterNode = parameters.state.getChildWithName(Identifier("filterSavedPoints"));
-    for (int i = 0; i < filterNumberOfPoints; i++) {
-        filterNode.setProperty(Identifier(String(i)), fftFilterPoints[i], nullptr);
-    }
-
-    computeFFTFilter();
 }
 
-void Plugex_31_fftFilterAudioProcessor::fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) {
+void Plugex_32_spectralDelayAudioProcessor::setDelayPoints(const Array<float> &value) {
+    ValueTree delayNode = parameters.state.getChildWithName(Identifier("delaySavedPoints"));
+    for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+        delayPoints.set(i, value[i]);
+        delayNode.setProperty(Identifier(String(i)), delayPoints[i], nullptr);
+    }
+    computeFFTDelay();
+}
+
+void Plugex_32_spectralDelayAudioProcessor::setFeedbackPoints(const Array<float> &value) {
+    ValueTree feedbackNode = parameters.state.getChildWithName(Identifier("feedbackSavedPoints"));
+    for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+        feedbackPoints.set(i, value[i]);
+        feedbackNode.setProperty(Identifier(String(i)), feedbackPoints[i], nullptr);
+    }
+    computeFFTFeedback();
+}
+
+void Plugex_32_spectralDelayAudioProcessor::fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) {
+    int channel = (engine == &fftEngine[0]) ? 0 : 1;
+    int count = frameCount[channel];    
+
     for (int j = 0; j < fftSize / 2 + 1; j++) {
-        float gain = fftFilter[j];
-        fftData[j*2] *= gain;
-        fftData[j*2+1] *= gain;
+        int binDelay = (int)(fftDelay[j] * currentNumberOfFrames);
+        float binFeedback = fftFeedback[j];
+        binDelay = count - binDelay;
+        if (binDelay < 0) {
+            binDelay += currentNumberOfFrames;
+        }
+        if (binDelay < currentNumberOfFrames) {
+            int realIndex = j * 2;
+            int imagIndex = j * 2 + 1;
+            float realTemp = sampleBuffers[channel][binDelay * fftSize + realIndex];
+            float imagTemp = sampleBuffers[channel][binDelay * fftSize + imagIndex];
+            sampleBuffers[channel].set(count * fftSize + realIndex, fftData[realIndex] + realTemp * binFeedback);
+            sampleBuffers[channel].set(count * fftSize + imagIndex, fftData[imagIndex] + imagTemp * binFeedback);
+            fftData[realIndex] = realTemp;
+            fftData[imagIndex] = imagTemp;
+        }
     }
+    frameCount[channel]++;
+    if (frameCount[channel] >= currentNumberOfFrames)
+        frameCount[channel] = 0;
 }
 
-void Plugex_31_fftFilterAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void Plugex_32_spectralDelayAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -218,10 +272,14 @@ void Plugex_31_fftFilterAudioProcessor::processBlock (AudioBuffer<float>& buffer
     int overlaps = 1 << (int) *overlapsParameter;
     int wintype = (int) *wintypeParameter;
 
+    if (order != lastOrder || overlaps != lastOverlaps) {
+        resizeBuffers(order, overlaps);
+        computeFFTDelay();
+        computeFFTFeedback();
+    }
     for (auto channel = 0; channel < totalNumInputChannels; channel++) {
         if (order != lastOrder || overlaps != lastOverlaps) {
             fftEngine[channel].setup(order, overlaps, wintype);
-            computeFFTFilter();
         } else if (wintype != lastWintype) {
             fftEngine[channel].setWintype(wintype);
         }
@@ -236,18 +294,18 @@ void Plugex_31_fftFilterAudioProcessor::processBlock (AudioBuffer<float>& buffer
 }
 
 //==============================================================================
-bool Plugex_31_fftFilterAudioProcessor::hasEditor() const
+bool Plugex_32_spectralDelayAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* Plugex_31_fftFilterAudioProcessor::createEditor()
+AudioProcessorEditor* Plugex_32_spectralDelayAudioProcessor::createEditor()
 {
-    return new Plugex_31_fftFilterAudioProcessorEditor (*this, parameters);
+    return new Plugex_32_spectralDelayAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
-void Plugex_31_fftFilterAudioProcessor::getStateInformation (MemoryBlock& destData)
+void Plugex_32_spectralDelayAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -257,7 +315,7 @@ void Plugex_31_fftFilterAudioProcessor::getStateInformation (MemoryBlock& destDa
     copyXmlToBinary (*xml, destData);
 }
 
-void Plugex_31_fftFilterAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void Plugex_32_spectralDelayAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -269,13 +327,22 @@ void Plugex_31_fftFilterAudioProcessor::setStateInformation (const void* data, i
         }
     }
 
-    ValueTree filterNode = parameters.state.getChildWithName(Identifier("filterSavedPoints"));
-    if (filterNode.isValid()) {
-        for (int i = 0; i < filterNumberOfPoints; i++) {
-            fftFilterPoints.set(i, (float) filterNode.getProperty(Identifier(String(i)), 0.0f));
+    ValueTree delayNode = parameters.state.getChildWithName(Identifier("delaySavedPoints"));
+    if (delayNode.isValid()) {
+        for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+            delayPoints.set(i, (float) delayNode.getProperty(Identifier(String(i)), 0.0f));
         }
-        computeFFTFilter();
-        fftFilterPointsChanged = true;
+        computeFFTDelay();
+        delayPointsChanged = true;
+    }
+
+    ValueTree feedbackNode = parameters.state.getChildWithName(Identifier("feedbackSavedPoints"));
+    if (feedbackNode.isValid()) {
+        for (int i = 0; i < multiSliderNumberOfPoints; i++) {
+            feedbackPoints.set(i, (float) feedbackNode.getProperty(Identifier(String(i)), 0.0f));
+        }
+        computeFFTFeedback();
+        feedbackPointsChanged = true;
     }
 }
 
@@ -283,5 +350,5 @@ void Plugex_31_fftFilterAudioProcessor::setStateInformation (const void* data, i
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new Plugex_31_fftFilterAudioProcessor();
+    return new Plugex_32_spectralDelayAudioProcessor();
 }

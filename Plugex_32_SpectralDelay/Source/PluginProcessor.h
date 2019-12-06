@@ -14,15 +14,16 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "FFTEngine.h"
 
-const int filterNumberOfPoints = 350;
+const int multiSliderNumberOfPoints = 350;
+const float maxDelayTimeInSeconds = 1.0f;
 
-class Plugex_31_fftFilterAudioProcessor  : public AudioProcessor,
+class Plugex_32_spectralDelayAudioProcessor  : public AudioProcessor,
                                              public FFTEngine::Listener
 {
 public:
     //==============================================================================
-    Plugex_31_fftFilterAudioProcessor();
-    ~Plugex_31_fftFilterAudioProcessor();
+    Plugex_32_spectralDelayAudioProcessor();
+    ~Plugex_32_spectralDelayAudioProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -59,18 +60,35 @@ public:
 
     void fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) override;
 
-    void computeFFTFilter();
-    void setFFTFilterPoints(const Array<float> &value);
+    void computeFFTDelay();
+    void computeFFTFeedback();
 
-    bool fftFilterPointsChanged = false;
-    Array<float> fftFilterPoints;
+    void setDelayPoints(const Array<float> &value);
+    void setFeedbackPoints(const Array<float> &value);
+
+    bool delayPointsChanged = false;
+    bool feedbackPointsChanged = false;
+
+    Array<float> delayPoints;
+    Array<float> feedbackPoints;
 
 private:
     //==============================================================================
     AudioProcessorValueTreeState parameters;
 
+    double currentSampleRate;
+
     FFTEngine fftEngine[2];
-    float fftFilter[8193];
+
+    float fftDelay[8193];
+    float fftFeedback[8193];
+
+    void resizeBuffers(int order, int overlaps);
+
+    int frameCount[2];
+    int currentNumberOfFrames;
+
+    Array<float> sampleBuffers[2];
 
     int lastOrder;
     int lastOverlaps;
@@ -80,5 +98,5 @@ private:
     float *overlapsParameter = nullptr;
     float *wintypeParameter = nullptr;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_31_fftFilterAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_32_spectralDelayAudioProcessor)
 };

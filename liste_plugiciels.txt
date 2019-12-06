@@ -72,7 +72,6 @@ Catalogue de plugins auto-documentés.
 
 - Analyse - resynthèse ( dans la categorie _00_ )
 - Filtre FFT
-- Synthèse croisée
 - Délai spectral
 
 ***

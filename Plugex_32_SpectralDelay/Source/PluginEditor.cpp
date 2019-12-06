@@ -13,16 +13,16 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-Plugex_31_fftFilterAudioProcessorEditor::Plugex_31_fftFilterAudioProcessorEditor (Plugex_31_fftFilterAudioProcessor& p,
+Plugex_32_spectralDelayAudioProcessorEditor::Plugex_32_spectralDelayAudioProcessorEditor (Plugex_32_spectralDelayAudioProcessor& p,
                                                                                       AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), processor (p), valueTreeState (vts)
 {
-    setSize (400, 300);
+    setSize (400, 450);
 
     setLookAndFeel(&plugexLookAndFeel);
     plugexLookAndFeel.setTheme("steal");
 
-    title.setText("Plugex - 31 - FFT Filter", NotificationType::dontSendNotification);
+    title.setText("Plugex - 32 - Spectral Delay", NotificationType::dontSendNotification);
     title.setFont(title.getFont().withPointHeight(title.getFont().getHeightInPoints() + 4));
     title.setJustificationType(Justification::horizontallyCentred);
     addAndMakeVisible(&title);
@@ -61,45 +61,64 @@ Plugex_31_fftFilterAudioProcessorEditor::Plugex_31_fftFilterAudioProcessorEditor
 
     wintypeAttachment.reset(new AudioProcessorValueTreeState::ComboBoxAttachment(valueTreeState, "wintype", wintypeCombo));
 
-    filterLabel.setText("Draw frequency amplitudes", NotificationType::dontSendNotification);
-    filterLabel.setJustificationType(Justification::horizontallyCentred);
-    addAndMakeVisible(&filterLabel);
+    delayLabel.setText("Delay per bin", NotificationType::dontSendNotification);
+    delayLabel.setJustificationType(Justification::horizontallyCentred);
+    addAndMakeVisible(&delayLabel);
 
-    filterMultiSlider.setup(filterNumberOfPoints);
-    filterMultiSlider.addListener(this);
-    filterMultiSlider.setLookAndFeel(&plugexLookAndFeel);
-    filterMultiSlider.setPoints(processor.fftFilterPoints);
-    addAndMakeVisible(&filterMultiSlider);
+    delayMultiSlider.setup(multiSliderNumberOfPoints);
+    delayMultiSlider.addListener(this);
+    delayMultiSlider.setLookAndFeel(&plugexLookAndFeel);
+    delayMultiSlider.setPoints(processor.delayPoints);
+    addAndMakeVisible(&delayMultiSlider);
+
+    feedbackLabel.setText("Feedback per bin", NotificationType::dontSendNotification);
+    feedbackLabel.setJustificationType(Justification::horizontallyCentred);
+    addAndMakeVisible(&feedbackLabel);
+
+    feedbackMultiSlider.setup(multiSliderNumberOfPoints);
+    feedbackMultiSlider.addListener(this);
+    feedbackMultiSlider.setLookAndFeel(&plugexLookAndFeel);
+    feedbackMultiSlider.setPoints(processor.feedbackPoints);
+    addAndMakeVisible(&feedbackMultiSlider);
 
     startTimer(0.05);
 }
 
-Plugex_31_fftFilterAudioProcessorEditor::~Plugex_31_fftFilterAudioProcessorEditor()
+Plugex_32_spectralDelayAudioProcessorEditor::~Plugex_32_spectralDelayAudioProcessorEditor()
 {
     orderCombo.setLookAndFeel(nullptr);
     overlapsCombo.setLookAndFeel(nullptr);
     wintypeCombo.setLookAndFeel(nullptr);
-    filterMultiSlider.setLookAndFeel(nullptr);
+    delayMultiSlider.setLookAndFeel(nullptr);
+    feedbackMultiSlider.setLookAndFeel(nullptr);
 }
 
-void Plugex_31_fftFilterAudioProcessorEditor::timerCallback() {
-    if (processor.fftFilterPointsChanged) {
-        filterMultiSlider.setPoints(processor.fftFilterPoints);
-        processor.fftFilterPointsChanged = false;
+void Plugex_32_spectralDelayAudioProcessorEditor::timerCallback() {
+    if (processor.delayPointsChanged) {
+        delayMultiSlider.setPoints(processor.delayPoints);
+        processor.delayPointsChanged = false;
+    }
+    if (processor.feedbackPointsChanged) {
+        feedbackMultiSlider.setPoints(processor.feedbackPoints);
+        processor.feedbackPointsChanged = false;
     }
 }
 
-void Plugex_31_fftFilterAudioProcessorEditor::multiSliderChanged(MultiSlider *multiSlider, const Array<float> &value) {
-    processor.setFFTFilterPoints(value);
+void Plugex_32_spectralDelayAudioProcessorEditor::multiSliderChanged(MultiSlider *multiSlider, const Array<float> &value) {
+    if (multiSlider == &delayMultiSlider) {
+        processor.setDelayPoints(value);
+    } else if (multiSlider == &feedbackMultiSlider) {
+        processor.setFeedbackPoints(value);
+    }
 }
 
 //==============================================================================
-void Plugex_31_fftFilterAudioProcessorEditor::paint (Graphics& g)
+void Plugex_32_spectralDelayAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 }
 
-void Plugex_31_fftFilterAudioProcessorEditor::resized()
+void Plugex_32_spectralDelayAudioProcessorEditor::resized()
 {
     auto area = getLocalBounds().reduced(12, 12);
     float width = area.getWidth();
@@ -120,6 +139,10 @@ void Plugex_31_fftFilterAudioProcessorEditor::resized()
     wintypeCombo.setBounds(area2.removeFromTop(60).withSizeKeepingCentre(120, 24));
 
     area.removeFromTop(12);
-    filterLabel.setBounds(area.removeFromTop(20).withSizeKeepingCentre(getWidth() - 20, 20));
-    filterMultiSlider.setBounds(area.removeFromTop(120).withSizeKeepingCentre(filterNumberOfPoints, 100));    
+    delayLabel.setBounds(area.removeFromTop(20).withSizeKeepingCentre(getWidth() - 20, 20));
+    delayMultiSlider.setBounds(area.removeFromTop(120).withSizeKeepingCentre(multiSliderNumberOfPoints, 100));    
+
+    area.removeFromTop(12);
+    feedbackLabel.setBounds(area.removeFromTop(20).withSizeKeepingCentre(getWidth() - 20, 20));
+    feedbackMultiSlider.setBounds(area.removeFromTop(120).withSizeKeepingCentre(multiSliderNumberOfPoints, 100));    
 }

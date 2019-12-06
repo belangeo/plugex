@@ -72,7 +72,7 @@ void FFTEngine::computeFrame(int overlap) {
     forwardFFT->performRealOnlyForwardTransform (fftData[overlap], true);
 
     // Registered callback to process the FFT frame.
-    listeners.call([&] (Listener& l) { l.fftEngineFrameReady(fftData[overlap], fftSize); });
+    listeners.call([&] (Listener& l) { l.fftEngineFrameReady(this, fftData[overlap], fftSize); });
 
     forwardFFT->performRealOnlyInverseTransform (fftData[overlap]);
     window.multiplyWithWindowingTable (fftData[overlap], fftSize);

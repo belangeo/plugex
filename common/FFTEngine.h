@@ -33,7 +33,7 @@ public:
     struct Listener
     {
         virtual ~Listener() {}
-        virtual void fftEngineFrameReady(float *fftData, int fftSize) = 0;
+        virtual void fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) = 0;
     };
 
     void addListener(Listener* l) { listeners.add (l); }

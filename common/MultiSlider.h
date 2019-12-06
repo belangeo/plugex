@@ -33,7 +33,7 @@ public:
     struct Listener
     {
         virtual ~Listener() {}
-        virtual void multiSliderChanged(const Array<float> &value) = 0;
+        virtual void multiSliderChanged(MultiSlider *multiSlider,  const Array<float> &value) = 0;
     };
 
     void addListener(Listener* l) { listeners.add (l); }
