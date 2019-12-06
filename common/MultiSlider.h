@@ -25,8 +25,8 @@ public:
     void paint(Graphics&) override;
     void resized() override;
 
-	void mouseDown (const MouseEvent &event);
- 	void mouseDrag (const MouseEvent &event);
+	void mouseDown (const MouseEvent &event) override;
+ 	void mouseDrag (const MouseEvent &event) override;
 
     void setPoints(const Array<float> &points);
 

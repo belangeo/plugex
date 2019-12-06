@@ -86,7 +86,7 @@ Plugex_00_visualDesignAudioProcessorEditor::~Plugex_00_visualDesignAudioProcesso
 {
 }
 
-void Plugex_00_visualDesignAudioProcessorEditor::multiSliderChanged(const std::vector<float> &value) {
+void Plugex_00_visualDesignAudioProcessorEditor::multiSliderChanged(MultiSlider *multiSlider, const Array<float> &value) {
     std::cout << "Vector size = " << value.size() << std::endl;
 }
 

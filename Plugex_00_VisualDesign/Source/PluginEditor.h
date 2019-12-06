@@ -26,7 +26,7 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
-    void multiSliderChanged(const std::vector<float> &value) override;
+    void multiSliderChanged(MultiSlider *multiSlider, const Array<float> &value) override;
 
 private:
     Plugex_00_visualDesignAudioProcessor& processor;

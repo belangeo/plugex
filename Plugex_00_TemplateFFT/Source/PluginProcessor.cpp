@@ -163,7 +163,7 @@ bool Plugex_00_templateFftAudioProcessor::isBusesLayoutSupported (const BusesLay
 }
 #endif
 
-void Plugex_00_templateFftAudioProcessor::fftEngineFrameReady(float *fftData, int fftSize) {
+void Plugex_00_templateFftAudioProcessor::fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) {
     // Function callback to process FFT frames.
 }
 

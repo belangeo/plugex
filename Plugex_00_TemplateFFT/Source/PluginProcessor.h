@@ -56,7 +56,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     // FFTEngine::Listener
-    void fftEngineFrameReady(float *fftData, int fftSize) override;
+    void fftEngineFrameReady(FFTEngine *engine, float *fftData, int fftSize) override;
 
 private:
     //==============================================================================
