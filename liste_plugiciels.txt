@@ -69,6 +69,7 @@ Catalogue de plugins auto-documentés.
 
 7. Effets dans le domaine fréquentiel
 -------------------------------------
+(steal)
 
 - Analyse - resynthèse ( dans la categorie _00_ )
 - Filtre FFT
