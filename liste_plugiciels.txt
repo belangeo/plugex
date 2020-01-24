@@ -71,7 +71,7 @@ Catalogue de plugins auto-documentés.
 -------------------------------------
 (steal)
 
-- Analyse - resynthèse ( dans la categorie _00_ )
+- Analyse - resynthèse ( 00_TemplateFFT )
 - Filtre FFT
 - Délai spectral
 
@@ -79,14 +79,15 @@ Catalogue de plugins auto-documentés.
 
 8. Effets par granulation
 -------------------------
+(lightblue)
 
-- Étirement - compression
-- Transposition
-- Nuages sonores
-- Gel du son
+- Gel du son - transposition                [x] record - (`) pitch - (`) jitter 
+- Étirement / compression - transposition   [x] record - (`) pitch - (`) speed - |forward| direction
+- Nuages sonores                            [x] record - (`) rnd pit - (`) rnd pos 
 
 9. Synthétiseurs virtuels
 -------------------------
+(lightgreen)
 
 - Onde sinusoïdale
 - Enveloppe d'amplitude
@@ -96,8 +97,8 @@ Catalogue de plugins auto-documentés.
 
 10. Ré-échantillonnage du son
 -----------------------------
+(pink)
 
-- Quantificateur
-- Ré-échantillonneur
+- Ré-échantillonneur / Quantificateur       (`) sr scale - (`) bit depth
 
 ***
