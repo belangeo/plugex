@@ -81,7 +81,7 @@ Catalogue de plugins auto-documentés.
 -------------------------
 (lightblue)
 
-- Gel du son - transposition                [x] record - (`) pitch - (`) jitter 
+- Gel du son - transposition
 - Étirement / compression - transposition   [x] record - (`) pitch - (`) speed - |forward| direction
 - Nuages sonores                            [x] record - (`) rnd pit - (`) rnd pos 
 
