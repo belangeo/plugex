@@ -24,7 +24,9 @@ class Granulator {
         void setup(double sampleRate, double memorySize);
         float process(float input);
 
+        void setRecordingSize(double newRecordingSize);
         void setRecording(bool shouldBeRecording);
+        bool getIsRecording();
 
         void setDensity(float newDensity);
         void setPitch(float newPitch);
@@ -35,6 +37,8 @@ class Granulator {
     private:
         double m_sampleRate;
         long maxSize;
+        long recordingSize;
+        long recordedSize;
 
         bool initialized;
 

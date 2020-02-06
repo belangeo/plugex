@@ -17,7 +17,7 @@
 #endif
 
 Granulator::Granulator() {
-    maxSize = 0;
+    maxSize = recordingSize = 0;
     initialized = false;
 }
 
@@ -25,7 +25,7 @@ Granulator::~Granulator() {}
 
 void Granulator::setup(double sampleRate, double memorySize) {
     m_sampleRate = sampleRate;
-    maxSize = static_cast<long> (m_sampleRate * memorySize);
+    maxSize = recordingSize = static_cast<long> (m_sampleRate * memorySize);
 
     isRecording = false;
     recordingIndex = 0;
@@ -59,6 +59,11 @@ void Granulator::setup(double sampleRate, double memorySize) {
 void Granulator::setRecording(bool shouldBeRecording) {
     isRecording = shouldBeRecording;
     recordingIndex = 0;
+    recordedSize = 0;
+}
+
+bool Granulator::getIsRecording() {
+    return isRecording;
 }
 
 void Granulator::setDensity(float newDensity) {
@@ -82,15 +87,22 @@ void Granulator::setDeviation(float newDeviation) {
     deviation = newDeviation;
 }
 
+void Granulator::setRecordingSize(double newRecordingSize) {
+    recordingSize = static_cast<long> (m_sampleRate * newRecordingSize);
+    if (recordingSize > maxSize)
+        recordingSize = maxSize;
+}
+
 float Granulator::process(float input) {
     if (! initialized) 
         return 0.f;
 
-    if (isRecording && recordingIndex < maxSize) {
+    if (isRecording && recordingIndex < recordingSize) {
         data[recordingIndex++] = input;
-        if (recordingIndex == maxSize) {
+        if (recordingIndex == recordingSize) {
             isRecording = false;
         }
+        recordedSize = recordingIndex - 1;
     }
 
     bool needNewGrain = false;
@@ -109,9 +121,9 @@ float Granulator::process(float input) {
                 flags[j] = 1;
                 if (j >= numberOfActiveGrains)
                     numberOfActiveGrains = j + 1;
-                gpos[j] = position * maxSize;
+                gpos[j] = position * recordedSize;
                 glen[j] = duration * m_sampleRate * pitch;
-                if ((gpos[j] + glen[j]) >= maxSize || (gpos[j] + glen[j]) < 0)
+                if ((gpos[j] + glen[j]) >= recordedSize || (gpos[j] + glen[j]) < 0)
                     flags[j] = false;
                 gphs[j] = 0.f;
                 ginc[j] = 1.f / (duration * m_sampleRate);

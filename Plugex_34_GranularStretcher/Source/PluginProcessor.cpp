@@ -16,11 +16,11 @@
 #define M_PI (3.14159265358979323846264338327950288)
 #endif
 
-static String densitySliderValueToText(float value) {
-    return String(value, 2) + String(" x");
+static String durationSliderValueToText(float value) {
+    return String(value, 2) + String(" sec");
 }
 
-static float densitySliderTextToValue(const String& text) {
+static float durationSliderTextToValue(const String& text) {
     return text.getFloatValue();
 }
 
@@ -32,11 +32,11 @@ static float pitchSliderTextToValue(const String& text) {
     return text.getFloatValue();
 }
 
-static String durationSliderValueToText(float value) {
-    return String(value, 3) + String(" sec");
+static String speedSliderValueToText(float value) {
+    return String(value, 2) + String(" x");
 }
 
-static float durationSliderTextToValue(const String& text) {
+static float speedSliderTextToValue(const String& text) {
     return text.getFloatValue();
 }
 
@@ -57,17 +57,17 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
                                                      NormalisableRange<float>(0.f, 1.0f, 1.f, 1.0f),
                                                      0.0f, nullptr, nullptr));
 
-    parameters.push_back(std::make_unique<Parameter>(String("density"), String("Density"), String(),
-                                                     NormalisableRange<float>(1.f, 500.0f, 0.01f, 0.3f),
-                                                     50.0f, densitySliderValueToText, densitySliderTextToValue));
+    parameters.push_back(std::make_unique<Parameter>(String("duration"), String("Duration"), String(),
+                                                     NormalisableRange<float>(0.25f, 10.f, 0.01f, 0.5f),
+                                                     1.f, durationSliderValueToText, durationSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("pitch"), String("Pitch"), String(),
                                                      NormalisableRange<float>(0.1f, 2.0f, 0.001f, 1.0f),
                                                      1.0f, pitchSliderValueToText, pitchSliderTextToValue));
 
-    parameters.push_back(std::make_unique<Parameter>(String("duration"), String("Duration"), String(),
-                                                     NormalisableRange<float>(0.001f, 0.25f, 0.001f, 0.5f),
-                                                     0.1f, durationSliderValueToText, durationSliderTextToValue));
+    parameters.push_back(std::make_unique<Parameter>(String("speed"), String("Speed"), String(),
+                                                     NormalisableRange<float>(.1f, 4.0f, 0.01f, 0.3f),
+                                                     1.0f, speedSliderValueToText, speedSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("jitter"), String("Jitter"), String(),
                                                      NormalisableRange<float>(0.f, 100.0f, 0.001f, 0.3f),
@@ -77,7 +77,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
 }
 
 //==============================================================================
-Plugex_33_granularFreezeAudioProcessor::Plugex_33_granularFreezeAudioProcessor()
+Plugex_34_granularStretcherAudioProcessor::Plugex_34_granularStretcherAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -91,23 +91,23 @@ Plugex_33_granularFreezeAudioProcessor::Plugex_33_granularFreezeAudioProcessor()
     parameters (*this, nullptr, Identifier(JucePlugin_Name), createParameterLayout())
 {
     activeParameter = parameters.getRawParameterValue("active");
-    densityParameter = parameters.getRawParameterValue("density");
-    pitchParameter = parameters.getRawParameterValue("pitch");
     durationParameter = parameters.getRawParameterValue("duration");
+    pitchParameter = parameters.getRawParameterValue("pitch");
+    speedParameter = parameters.getRawParameterValue("speed");
     jitterParameter = parameters.getRawParameterValue("jitter");
 }
 
-Plugex_33_granularFreezeAudioProcessor::~Plugex_33_granularFreezeAudioProcessor()
+Plugex_34_granularStretcherAudioProcessor::~Plugex_34_granularStretcherAudioProcessor()
 {
 }
 
 //==============================================================================
-const String Plugex_33_granularFreezeAudioProcessor::getName() const
+const String Plugex_34_granularStretcherAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool Plugex_33_granularFreezeAudioProcessor::acceptsMidi() const
+bool Plugex_34_granularStretcherAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -116,7 +116,7 @@ bool Plugex_33_granularFreezeAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool Plugex_33_granularFreezeAudioProcessor::producesMidi() const
+bool Plugex_34_granularStretcherAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -125,7 +125,7 @@ bool Plugex_33_granularFreezeAudioProcessor::producesMidi() const
    #endif
 }
 
-bool Plugex_33_granularFreezeAudioProcessor::isMidiEffect() const
+bool Plugex_34_granularStretcherAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -134,61 +134,62 @@ bool Plugex_33_granularFreezeAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double Plugex_33_granularFreezeAudioProcessor::getTailLengthSeconds() const
+double Plugex_34_granularStretcherAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int Plugex_33_granularFreezeAudioProcessor::getNumPrograms()
+int Plugex_34_granularStretcherAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int Plugex_33_granularFreezeAudioProcessor::getCurrentProgram()
+int Plugex_34_granularStretcherAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void Plugex_33_granularFreezeAudioProcessor::setCurrentProgram (int index)
+void Plugex_34_granularStretcherAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String Plugex_33_granularFreezeAudioProcessor::getProgramName (int index)
+const String Plugex_34_granularStretcherAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void Plugex_33_granularFreezeAudioProcessor::changeProgramName (int index, const String& newName)
+void Plugex_34_granularStretcherAudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void Plugex_33_granularFreezeAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void Plugex_34_granularStretcherAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    granulator[0].setup(sampleRate, 0.5);
-    granulator[1].setup(sampleRate, 0.5);
+    m_sampleRate = sampleRate;
+    granulator[0].setup(sampleRate, 10.f);
+    granulator[1].setup(sampleRate, 10.f);
     granulator[0].setRecording(false);
     granulator[1].setRecording(false);
     portLastSample = *activeParameter;
-    densitySmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
-    densitySmoothed.setCurrentAndTargetValue(*densityParameter);
-    pitchSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
-    pitchSmoothed.setCurrentAndTargetValue(*pitchParameter);
     durationSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     durationSmoothed.setCurrentAndTargetValue(*durationParameter);
+    pitchSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
+    pitchSmoothed.setCurrentAndTargetValue(*pitchParameter);
+    speedSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
+    speedSmoothed.setCurrentAndTargetValue(*speedParameter);
     jitterSmoothed.reset(sampleRate, samplesPerBlock/sampleRate);
     jitterSmoothed.setCurrentAndTargetValue(*jitterParameter);
 }
 
-void Plugex_33_granularFreezeAudioProcessor::releaseResources()
+void Plugex_34_granularStretcherAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool Plugex_33_granularFreezeAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool Plugex_34_granularStretcherAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
@@ -211,7 +212,7 @@ bool Plugex_33_granularFreezeAudioProcessor::isBusesLayoutSupported (const Buses
 }
 #endif
 
-void Plugex_33_granularFreezeAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void Plugex_34_granularStretcherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -220,62 +221,81 @@ void Plugex_33_granularFreezeAudioProcessor::processBlock (AudioBuffer<float>& b
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    densitySmoothed.setTargetValue(*densityParameter);
-    pitchSmoothed.setTargetValue(*pitchParameter);
     durationSmoothed.setTargetValue(*durationParameter);
+    pitchSmoothed.setTargetValue(*pitchParameter);
+    speedSmoothed.setTargetValue(*speedParameter);
     jitterSmoothed.setTargetValue(*jitterParameter);
 
     for (int i = 0; i < buffer.getNumSamples(); i++)
     {
         float jitter = jitterSmoothed.getNextValue() * 0.01f;
-        float density = densitySmoothed.getNextValue() + jitterRandom.nextFloat() * 10.f * jitter;
-        float pitch = pitchSmoothed.getNextValue() * ((jitterRandom.nextFloat() - 0.5f) * 0.25f * jitter + 1.f);
-        float duration = durationSmoothed.getNextValue() * ((jitterRandom.nextFloat() - 0.5f) * 0.25f * jitter + 1.f);
-        float position = jitterRandom.nextFloat() * 0.8f * jitter;
-        float deviation = jitterRandom.nextFloat() * 0.2f * jitter;
-        
+        float duration = durationSmoothed.getNextValue();
+        float grainDuration = 0.15 * ((jitterRandom.nextFloat() - 0.5f) * 0.05f * jitter + 1.f);
+        float pitch = pitchSmoothed.getNextValue() * ((jitterRandom.nextFloat() - 0.5f) * 0.05f * jitter + 1.f);
+        float deviation = jitterRandom.nextFloat() * 0.05f * jitter;
+        float density = 100.f + jitterRandom.nextFloat() * 5.f * jitter;
+
+        float speed = speedSmoothed.getNextValue() * ((jitterRandom.nextFloat() - 0.5f) * 0.05f * jitter + 1.f);
+        float position = readerIndex * ((jitterRandom.nextFloat() - 0.5f) * 0.05f * jitter + 1.f);
+        readerIndex += readerBaseInc * speed;
+        if (readerIndex >= 1.f)
+            readerIndex -= 1.f;
+
         bool activateRecording = (bool)*activeParameter && !isActive;
-        portLastSample = *activeParameter + (portLastSample - *activeParameter) * 0.9999;
+        if (activateRecording)
+            readerBaseInc = (1.f / duration) / m_sampleRate;
+
+        if (!isActive || granulator[0].getIsRecording()) {
+            portLastSample = 0.f + (portLastSample - 0.f) * 0.9999;
+        } else {
+            portLastSample = 1.f + (portLastSample - 1.f) * 0.9999;
+        }
+
+        if (isRecording && !granulator[0].getIsRecording())
+            readerIndex = 0.f;
 
         for (int channel = 0; channel < totalNumInputChannels; ++channel)
         {
-            float freezeSample = 0.f;
+            float stretchSample = 0.f;
             auto* channelData = buffer.getWritePointer (channel);
-            if (activateRecording)
+            if (activateRecording) {
+                granulator[channel].setRecordingSize(duration);
                 granulator[channel].setRecording(true);
+            }
             granulator[channel].setDensity(density);
             granulator[channel].setPitch(pitch);
-            granulator[channel].setDuration(duration);
+            granulator[channel].setDuration(grainDuration);
             granulator[channel].setPosition(position);
             granulator[channel].setDeviation(deviation);
             if (isActive)
-                freezeSample = granulator[channel].process(channelData[i]);
-            channelData[i] = channelData[i] + (freezeSample - channelData[i]) * portLastSample;
+                stretchSample = granulator[channel].process(channelData[i]);
+            channelData[i] = channelData[i] + (stretchSample - channelData[i]) * portLastSample;
         }
         isActive = (bool)*activeParameter;
+        isRecording = granulator[0].getIsRecording();
     }
 }
 
 //==============================================================================
-bool Plugex_33_granularFreezeAudioProcessor::hasEditor() const
+bool Plugex_34_granularStretcherAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* Plugex_33_granularFreezeAudioProcessor::createEditor()
+AudioProcessorEditor* Plugex_34_granularStretcherAudioProcessor::createEditor()
 {
-    return new Plugex_33_granularFreezeAudioProcessorEditor (*this, parameters);
+    return new Plugex_34_granularStretcherAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
-void Plugex_33_granularFreezeAudioProcessor::getStateInformation (MemoryBlock& destData)
+void Plugex_34_granularStretcherAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void Plugex_33_granularFreezeAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void Plugex_34_granularStretcherAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -285,5 +305,5 @@ void Plugex_33_granularFreezeAudioProcessor::setStateInformation (const void* da
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new Plugex_33_granularFreezeAudioProcessor();
+    return new Plugex_34_granularStretcherAudioProcessor();
 }

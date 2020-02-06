@@ -18,11 +18,11 @@
 //==============================================================================
 /**
 */
-class Plugex_33_granularFreezeAudioProcessorEditor  : public AudioProcessorEditor
+class Plugex_34_granularStretcherAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    Plugex_33_granularFreezeAudioProcessorEditor (Plugex_33_granularFreezeAudioProcessor&, AudioProcessorValueTreeState& vts);
-    ~Plugex_33_granularFreezeAudioProcessorEditor();
+    Plugex_34_granularStretcherAudioProcessorEditor (Plugex_34_granularStretcherAudioProcessor&, AudioProcessorValueTreeState& vts);
+    ~Plugex_34_granularStretcherAudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -31,7 +31,7 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    Plugex_33_granularFreezeAudioProcessor& processor;
+    Plugex_34_granularStretcherAudioProcessor& processor;
 
     AudioProcessorValueTreeState& valueTreeState;
 
@@ -42,21 +42,21 @@ private:
     TextButton activeButton;
     std::unique_ptr<AudioProcessorValueTreeState::ButtonAttachment> activeAttachment;
 
-    Label  densityLabel;
-    Slider densityKnob;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> densityAttachment;
+    Label  durationLabel;
+    Slider durationKnob;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> durationAttachment;
 
     Label  pitchLabel;
     Slider pitchKnob;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> pitchAttachment;
 
-    Label  durationLabel;
-    Slider durationKnob;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> durationAttachment;
+    Label  speedLabel;
+    Slider speedKnob;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> speedAttachment;
 
     Label  jitterLabel;
     Slider jitterKnob;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> jitterAttachment;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_33_granularFreezeAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_34_granularStretcherAudioProcessorEditor)
 };

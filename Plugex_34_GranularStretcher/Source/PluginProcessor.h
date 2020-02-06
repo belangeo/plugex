@@ -18,12 +18,12 @@
 //==============================================================================
 /**
 */
-class Plugex_33_granularFreezeAudioProcessor  : public AudioProcessor
+class Plugex_34_granularStretcherAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    Plugex_33_granularFreezeAudioProcessor();
-    ~Plugex_33_granularFreezeAudioProcessor();
+    Plugex_34_granularStretcherAudioProcessor();
+    ~Plugex_34_granularStretcherAudioProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -62,26 +62,32 @@ private:
     //==============================================================================
     AudioProcessorValueTreeState parameters;
 
+    double m_sampleRate;
+
     Random jitterRandom;
 
     Granulator granulator[2];
 
     float portLastSample = 0.f;
+    float readerIndex = 0.f;
+    float readerBaseInc = 0.f;
+
+    bool isRecording;
 
     bool isActive = false;
     float *activeParameter = nullptr;
 
-    float *densityParameter = nullptr;
-    SmoothedValue<float> densitySmoothed;
+    float *durationParameter = nullptr;
+    SmoothedValue<float> durationSmoothed;
 
     float *pitchParameter = nullptr;
     SmoothedValue<float> pitchSmoothed;
 
-    float *durationParameter = nullptr;
-    SmoothedValue<float> durationSmoothed;
+    float *speedParameter = nullptr;
+    SmoothedValue<float> speedSmoothed;
 
     float *jitterParameter = nullptr;
     SmoothedValue<float> jitterSmoothed;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_33_granularFreezeAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_34_granularStretcherAudioProcessor)
 };
