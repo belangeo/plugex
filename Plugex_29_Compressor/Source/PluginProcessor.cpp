@@ -243,10 +243,10 @@ void Plugex_29_compressorAudioProcessor::processBlock (AudioBuffer<float>& buffe
         falltime = expf(-1.0f / (currentSampleRate * falltime));
         float knee = 0.5f;                                                      /* 0.001 = hard knee, 1 = soft knee */
         thresh += 3.0f * knee;
-        if (thresh > 0.0)
-            thresh = 0.0;
+        if (thresh > 0.0f)
+            thresh = 0.0f;
         float ampthresh = powf(10.0f, thresh * 0.05f);                          /* up to 3 dB above threshold */
-        float kneethresh = powf(10.0f, (thresh - (knee * 8.5f + 0.5f)) * 0.05); /* up to 6 dB under threshold */
+        float kneethresh = powf(10.0f, (thresh - (knee * 8.5f + 0.5f)) * 0.05f); /* up to 6 dB under threshold */
         float invKneeRange = 1.0f / (ampthresh - kneethresh);
 
         for (int channel = 0; channel < totalNumInputChannels; ++channel) {
