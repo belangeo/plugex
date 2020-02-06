@@ -44,7 +44,8 @@ void DelayLine::write(float input) {
     if (m_writePosition == 0) {
         data[m_maxSize] = input;
     }
-    if (m_writePosition++ == m_maxSize) {
+    m_writePosition++;
+    if (m_writePosition == m_maxSize) {
         m_writePosition = 0;
     }
 }
