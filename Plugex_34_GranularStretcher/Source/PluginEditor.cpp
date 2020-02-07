@@ -23,7 +23,7 @@ Plugex_34_granularStretcherAudioProcessorEditor::Plugex_34_granularStretcherAudi
     setLookAndFeel(&plugexLookAndFeel);
     plugexLookAndFeel.setTheme("lightblue");
 
-    title.setText("Plugex - 34 - Granulator Stretcher", NotificationType::dontSendNotification);
+    title.setText("Plugex - 34 - Granular Stretcher", NotificationType::dontSendNotification);
     title.setFont(title.getFont().withPointHeight(title.getFont().getHeightInPoints() + 4));
     title.setJustificationType(Justification::horizontallyCentred);
     addAndMakeVisible(&title);

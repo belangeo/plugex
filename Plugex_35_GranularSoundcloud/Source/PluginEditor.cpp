@@ -13,7 +13,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-Plugex_33_granularFreezeAudioProcessorEditor::Plugex_33_granularFreezeAudioProcessorEditor (Plugex_33_granularFreezeAudioProcessor& p, AudioProcessorValueTreeState& vts)
+Plugex_35_granularSoundcloudAudioProcessorEditor::Plugex_35_granularSoundcloudAudioProcessorEditor (Plugex_35_granularSoundcloudAudioProcessor& p, AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), processor (p), valueTreeState (vts)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -23,7 +23,7 @@ Plugex_33_granularFreezeAudioProcessorEditor::Plugex_33_granularFreezeAudioProce
     setLookAndFeel(&plugexLookAndFeel);
     plugexLookAndFeel.setTheme("lightblue");
 
-    title.setText("Plugex - 33 - Granular Freeze", NotificationType::dontSendNotification);
+    title.setText("Plugex - 35 - Granular Soundcloud", NotificationType::dontSendNotification);
     title.setFont(title.getFont().withPointHeight(title.getFont().getHeightInPoints() + 4));
     title.setJustificationType(Justification::horizontallyCentred);
     addAndMakeVisible(&title);
@@ -46,58 +46,58 @@ Plugex_33_granularFreezeAudioProcessorEditor::Plugex_33_granularFreezeAudioProce
 
     densityAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "density", densityKnob));
 
-    pitchLabel.setText("Pitch", NotificationType::dontSendNotification);
-    pitchLabel.setJustificationType(Justification::horizontallyCentred);
-    addAndMakeVisible(&pitchLabel);
+    rndpitLabel.setText("Rnd Pit", NotificationType::dontSendNotification);
+    rndpitLabel.setJustificationType(Justification::horizontallyCentred);
+    addAndMakeVisible(&rndpitLabel);
 
-    pitchKnob.setLookAndFeel(&plugexLookAndFeel);
-    pitchKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    pitchKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
-    addAndMakeVisible(&pitchKnob);
+    rndpitKnob.setLookAndFeel(&plugexLookAndFeel);
+    rndpitKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    rndpitKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
+    addAndMakeVisible(&rndpitKnob);
 
-    pitchAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "pitch", pitchKnob));
+    rndpitAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "rndpit", rndpitKnob));
 
-    durationLabel.setText("Gr. Dur", NotificationType::dontSendNotification);
-    durationLabel.setJustificationType(Justification::horizontallyCentred);
-    addAndMakeVisible(&durationLabel);
+    rndposLabel.setText("Rnd Pos", NotificationType::dontSendNotification);
+    rndposLabel.setJustificationType(Justification::horizontallyCentred);
+    addAndMakeVisible(&rndposLabel);
 
-    durationKnob.setLookAndFeel(&plugexLookAndFeel);
-    durationKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    durationKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
-    addAndMakeVisible(&durationKnob);
+    rndposKnob.setLookAndFeel(&plugexLookAndFeel);
+    rndposKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    rndposKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
+    addAndMakeVisible(&rndposKnob);
 
-    durationAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "duration", durationKnob));
+    rndposAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "rndpos", rndposKnob));
 
-    jitterLabel.setText("Jitter", NotificationType::dontSendNotification);
-    jitterLabel.setJustificationType(Justification::horizontallyCentred);
-    addAndMakeVisible(&jitterLabel);
+    rnddurLabel.setText("Rnd Dur", NotificationType::dontSendNotification);
+    rnddurLabel.setJustificationType(Justification::horizontallyCentred);
+    addAndMakeVisible(&rnddurLabel);
 
-    jitterKnob.setLookAndFeel(&plugexLookAndFeel);
-    jitterKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    jitterKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
-    addAndMakeVisible(&jitterKnob);
+    rnddurKnob.setLookAndFeel(&plugexLookAndFeel);
+    rnddurKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    rnddurKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 80, 20);
+    addAndMakeVisible(&rnddurKnob);
 
-    jitterAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "jitter", jitterKnob));
+    rnddurAttachment.reset(new AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "rnddur", rnddurKnob));
 }
 
-Plugex_33_granularFreezeAudioProcessorEditor::~Plugex_33_granularFreezeAudioProcessorEditor()
+Plugex_35_granularSoundcloudAudioProcessorEditor::~Plugex_35_granularSoundcloudAudioProcessorEditor()
 {
     activeButton.setLookAndFeel(nullptr);
     densityKnob.setLookAndFeel(nullptr);
-    pitchKnob.setLookAndFeel(nullptr);
-    durationKnob.setLookAndFeel(nullptr);
-    jitterKnob.setLookAndFeel(nullptr);
+    rndpitKnob.setLookAndFeel(nullptr);
+    rndposKnob.setLookAndFeel(nullptr);
+    rnddurKnob.setLookAndFeel(nullptr);
     setLookAndFeel(nullptr);
 }
 
 //==============================================================================
-void Plugex_33_granularFreezeAudioProcessorEditor::paint (Graphics& g)
+void Plugex_35_granularSoundcloudAudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 }
 
-void Plugex_33_granularFreezeAudioProcessorEditor::resized()
+void Plugex_35_granularSoundcloudAudioProcessorEditor::resized()
 {
     auto area = getLocalBounds().reduced(12, 12);
     float width = area.getWidth();
@@ -114,17 +114,17 @@ void Plugex_33_granularFreezeAudioProcessorEditor::resized()
     densityLabel.setBounds(densityArea.removeFromTop(20));
     densityKnob.setBounds(densityArea);
 
-    auto pitchArea = area2.removeFromLeft(width/4.0f).withSizeKeepingCentre(80, 100);
-    pitchLabel.setBounds(pitchArea.removeFromTop(20));
-    pitchKnob.setBounds(pitchArea);
+    auto rndpitArea = area2.removeFromLeft(width/4.0f).withSizeKeepingCentre(80, 100);
+    rndpitLabel.setBounds(rndpitArea.removeFromTop(20));
+    rndpitKnob.setBounds(rndpitArea);
 
-    auto durationArea = area2.removeFromLeft(width/4.0f).withSizeKeepingCentre(80, 100);
-    durationLabel.setBounds(durationArea.removeFromTop(20));
-    durationKnob.setBounds(durationArea);
+    auto rndposArea = area2.removeFromLeft(width/4.0f).withSizeKeepingCentre(80, 100);
+    rndposLabel.setBounds(rndposArea.removeFromTop(20));
+    rndposKnob.setBounds(rndposArea);
 
-    auto jitterArea = area2.withSizeKeepingCentre(80, 100);
-    jitterLabel.setBounds(jitterArea.removeFromTop(20));
-    jitterKnob.setBounds(jitterArea);
+    auto rnddurArea = area2.withSizeKeepingCentre(80, 100);
+    rnddurLabel.setBounds(rnddurArea.removeFromTop(20));
+    rnddurKnob.setBounds(rnddurArea);
 
     area.removeFromTop(12);
 }

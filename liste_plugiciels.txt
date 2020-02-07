@@ -75,15 +75,15 @@ Catalogue de plugins auto-documentés.
 - Filtre FFT
 - Délai spectral
 
-***
-
 8. Effets par granulation
 -------------------------
 (lightblue)
 
 - Gel du son - transposition
 - Étirement / compression - transposition
-- Nuages sonores                            [x] record - (`) rnd dens - (`) rnd pit - (`) rnd pos - (`) rnd dur - (`) rnd dev 
+- Nuages sonores
+
+***
 
 9. Synthétiseurs virtuels
 -------------------------
