@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="EFxlab" name="Plugex01AmplitudeLinear" projectType="audioplug"
-              jucerVersion="5.4.5" headerPath="../../../common" pluginFormats="buildAU,buildVST,buildVST3"
+              jucerVersion="5.4.7" headerPath="../../../common" pluginFormats="buildAU,buildVST,buildVST3"
               companyName="belangeo">
   <MAINGROUP id="FiH4z5" name="Plugex01AmplitudeLinear">
     <GROUP id="{1D329CD4-1DA1-6018-85F2-BD46851A122B}" name="Source">

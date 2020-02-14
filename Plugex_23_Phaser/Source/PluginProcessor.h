@@ -63,16 +63,16 @@ private:
 
     double currentSampleRate;
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *spreadParameter = nullptr;
+    std::atomic<float> *spreadParameter = nullptr;
     SmoothedValue<float> spreadSmoothed;
 
-    float *qParameter = nullptr;
+    std::atomic<float> *qParameter = nullptr;
     SmoothedValue<float> qSmoothed;
 
-    float *feedbackParameter = nullptr;
+    std::atomic<float> *feedbackParameter = nullptr;
     SmoothedValue<float> feedbackSmoothed;
 
     Biquad allpassFilter[8][2];

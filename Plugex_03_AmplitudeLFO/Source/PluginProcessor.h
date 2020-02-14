@@ -57,10 +57,10 @@ private:
     //==============================================================================
     AudioProcessorValueTreeState parameters;
     
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *depthParameter = nullptr;
+    std::atomic<float> *depthParameter = nullptr;
     SmoothedValue<float> depthSmoothed;
 
     float currentSampleRate;

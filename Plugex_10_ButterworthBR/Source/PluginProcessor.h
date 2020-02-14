@@ -66,10 +66,10 @@ private:
     float lastFilteredSample1[2];
     float lastFilteredSample2[2];
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *qParameter = nullptr;
+    std::atomic<float> *qParameter = nullptr;
     SmoothedValue<float> qSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_10_butterworthBrAudioProcessor)

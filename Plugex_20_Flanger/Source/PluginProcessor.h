@@ -65,13 +65,13 @@ private:
 
     float lfoPhase;
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *delayParameter = nullptr;
+    std::atomic<float> *delayParameter = nullptr;
     SmoothedValue<float> delaySmoothed;
 
-    float *depthParameter = nullptr;
+    std::atomic<float> *depthParameter = nullptr;
     SmoothedValue<float> depthSmoothed;
 
     DelayLine delayLine[2];

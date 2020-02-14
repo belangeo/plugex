@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="L17qJw" name="Plugex04FirstOrderLP" projectType="audioplug"
-              jucerVersion="5.4.5" companyName="belangeo" pluginFormats="buildAU,buildVST,buildVST3"
+              jucerVersion="5.4.7" companyName="belangeo" pluginFormats="buildAU,buildVST,buildVST3"
               headerPath="../../../common">
   <MAINGROUP id="Or25Pw" name="Plugex04FirstOrderLP">
     <GROUP id="{054DC0CC-A68A-C3C1-D845-31DABDD35561}" name="Source">

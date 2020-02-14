@@ -76,9 +76,9 @@ private:
     int lastOverlaps;
     int lastWintype;
 
-    float *orderParameter = nullptr;
-    float *overlapsParameter = nullptr;
-    float *wintypeParameter = nullptr;
+    std::atomic<float> *orderParameter = nullptr;
+    std::atomic<float> *overlapsParameter = nullptr;
+    std::atomic<float> *wintypeParameter = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_31_fftFilterAudioProcessor)
 };

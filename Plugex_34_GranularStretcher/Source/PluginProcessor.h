@@ -75,18 +75,18 @@ private:
     bool isRecording;
 
     bool isActive = false;
-    float *activeParameter = nullptr;
+    std::atomic<float> *activeParameter = nullptr;
 
-    float *durationParameter = nullptr;
+    std::atomic<float> *durationParameter = nullptr;
     SmoothedValue<float> durationSmoothed;
 
-    float *pitchParameter = nullptr;
+    std::atomic<float> *pitchParameter = nullptr;
     SmoothedValue<float> pitchSmoothed;
 
-    float *speedParameter = nullptr;
+    std::atomic<float> *speedParameter = nullptr;
     SmoothedValue<float> speedSmoothed;
 
-    float *jitterParameter = nullptr;
+    std::atomic<float> *jitterParameter = nullptr;
     SmoothedValue<float> jitterSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_34_granularStretcherAudioProcessor)

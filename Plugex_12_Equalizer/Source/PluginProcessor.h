@@ -85,16 +85,16 @@ private:
     void compute_coeffs_lowshelf();
     void compute_coeffs_highshelf();
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *qParameter = nullptr;
+    std::atomic<float> *qParameter = nullptr;
     SmoothedValue<float> qSmoothed;
 
-    float *boostParameter = nullptr;
+    std::atomic<float> *boostParameter = nullptr;
     SmoothedValue<float> boostSmoothed;
 
-    float *typeParameter = nullptr;
+    std::atomic<float> *typeParameter = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_12_equalizerAudioProcessor)
 };

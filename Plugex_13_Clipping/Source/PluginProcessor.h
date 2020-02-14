@@ -63,10 +63,10 @@ private:
 
     double currentSampleRate;
 
-    float *threshParameter = nullptr;
+    std::atomic<float> *threshParameter = nullptr;
     SmoothedValue<float> threshSmoothed;
 
-    float *cutoffParameter = nullptr;
+    std::atomic<float> *cutoffParameter = nullptr;
     SmoothedValue<float> cutoffSmoothed;
 
     OnePoleLowpass lowpassFilter[2];

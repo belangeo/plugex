@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="l3Q60j" name="Plugex20Flanger" projectType="audioplug" jucerVersion="5.4.5"
+<JUCERPROJECT id="l3Q60j" name="Plugex20Flanger" projectType="audioplug" jucerVersion="5.4.7"
               pluginFormats="buildAU,buildVST,buildVST3" headerPath="../../../common"
               companyName="belangeo">
   <MAINGROUP id="vdJK2N" name="Plugex20Flanger">

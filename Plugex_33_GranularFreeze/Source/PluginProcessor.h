@@ -69,18 +69,18 @@ private:
     float portLastSample = 0.f;
 
     bool isActive = false;
-    float *activeParameter = nullptr;
+    std::atomic<float> *activeParameter = nullptr;
 
-    float *densityParameter = nullptr;
+    std::atomic<float> *densityParameter = nullptr;
     SmoothedValue<float> densitySmoothed;
 
-    float *pitchParameter = nullptr;
+    std::atomic<float> *pitchParameter = nullptr;
     SmoothedValue<float> pitchSmoothed;
 
-    float *durationParameter = nullptr;
+    std::atomic<float> *durationParameter = nullptr;
     SmoothedValue<float> durationSmoothed;
 
-    float *jitterParameter = nullptr;
+    std::atomic<float> *jitterParameter = nullptr;
     SmoothedValue<float> jitterSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_33_granularFreezeAudioProcessor)

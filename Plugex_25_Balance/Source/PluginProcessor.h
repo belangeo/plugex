@@ -57,7 +57,7 @@ private:
     //==============================================================================
     AudioProcessorValueTreeState parameters;
 
-    float *balParameter = nullptr;
+    std::atomic<float> *balParameter = nullptr;
     SmoothedValue<float> balSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_25_balanceAudioProcessor)

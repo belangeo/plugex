@@ -66,10 +66,10 @@ private:
     float lastFilteredSample1[2];
     float lastFilteredSample2[2];
 
-    float *panParameter = nullptr;
+    std::atomic<float> *panParameter = nullptr;
     SmoothedValue<float> panSmoothed;
 
-    float *typeParameter = nullptr;
+    std::atomic<float> *typeParameter = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_24_pannerAudioProcessor)
 };

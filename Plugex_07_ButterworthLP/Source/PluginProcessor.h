@@ -66,7 +66,7 @@ private:
     float lastFilteredSample1[2];
     float lastFilteredSample2[2];
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_07_butterworthLpAudioProcessor)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="FePMnx" name="Plugex03AmplitudeLFO" projectType="audioplug"
-              jucerVersion="5.4.5" headerPath="../../../common" companyName="belangeo"
+              jucerVersion="5.4.7" headerPath="../../../common" companyName="belangeo"
               pluginFormats="buildAU,buildVST,buildVST3">
   <MAINGROUP id="qjqOg6" name="Plugex03AmplitudeLFO">
     <GROUP id="{B241BAD0-79B7-8581-0B71-83EBE0BD190A}" name="Source">

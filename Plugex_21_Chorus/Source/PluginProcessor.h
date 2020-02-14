@@ -68,13 +68,13 @@ private:
     
     double currentSampleRate;
 
-    float *depthParameter = nullptr;
+    std::atomic<float> *depthParameter = nullptr;
     SmoothedValue<float> depthSmoothed;
 
-    float *feedbackParameter = nullptr;
+    std::atomic<float> *feedbackParameter = nullptr;
     SmoothedValue<float> feedbackSmoothed;
 
-    float *balanceParameter = nullptr;
+    std::atomic<float> *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
     SinOsc lfoDelayTime[8][2];

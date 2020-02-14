@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Ed2RWG" name="Plugex00VisualDesign" projectType="audioplug"
-              jucerVersion="5.4.5" pluginFormats="buildAU,buildVST,buildVST3"
+              jucerVersion="5.4.7" pluginFormats="buildAU,buildVST,buildVST3"
               headerPath="../../../common" companyName="belangeo">
   <MAINGROUP id="DEp4Vn" name="Plugex00VisualDesign">
     <GROUP id="{DA554DF8-43AE-456B-E5AB-BF6545F4B67D}" name="Source">

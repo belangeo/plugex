@@ -65,10 +65,10 @@ private:
     int sampleCount;
     float currentValue[2];
 
-    float *srscaleParameter = nullptr;
+    std::atomic<float> *srscaleParameter = nullptr;
     SmoothedValue<float> srscaleSmoothed;
 
-    float *bitdepthParameter = nullptr;
+    std::atomic<float> *bitdepthParameter = nullptr;
     SmoothedValue<float> bitdepthSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_41_resamplerAudioProcessor)

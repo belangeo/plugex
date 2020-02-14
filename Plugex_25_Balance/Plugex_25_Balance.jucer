@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="EFxlab" name="Plugex25Balance" projectType="audioplug" jucerVersion="5.4.5"
+<JUCERPROJECT id="EFxlab" name="Plugex25Balance" projectType="audioplug" jucerVersion="5.4.7"
               headerPath="../../../common" pluginFormats="buildAU,buildVST,buildVST3"
               companyName="belangeo">
   <MAINGROUP id="FiH4z5" name="Plugex25Balance">

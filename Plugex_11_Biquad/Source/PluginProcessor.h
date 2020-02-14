@@ -86,13 +86,13 @@ private:
     void compute_coeffs_bs();
     void compute_coeffs_ap();
 
-    float *freqParameter = nullptr;
+    std::atomic<float> *freqParameter = nullptr;
     SmoothedValue<float> freqSmoothed;
 
-    float *qParameter = nullptr;
+    std::atomic<float> *qParameter = nullptr;
     SmoothedValue<float> qSmoothed;
 
-    float *typeParameter = nullptr;
+    std::atomic<float> *typeParameter = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_11_biquadAudioProcessor)
 };

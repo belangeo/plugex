@@ -71,18 +71,18 @@ private:
     float portLastSample = 0.f;
 
     bool isActive = false;
-    float *activeParameter = nullptr;
+    std::atomic<float> *activeParameter = nullptr;
 
-    float *densityParameter = nullptr;
+    std::atomic<float> *densityParameter = nullptr;
     SmoothedValue<float> densitySmoothed;
 
-    float *rndpitParameter = nullptr;
+    std::atomic<float> *rndpitParameter = nullptr;
     SmoothedValue<float> rndpitSmoothed;
 
-    float *rndposParameter = nullptr;
+    std::atomic<float> *rndposParameter = nullptr;
     SmoothedValue<float> rndposSmoothed;
 
-    float *rnddurParameter = nullptr;
+    std::atomic<float> *rnddurParameter = nullptr;
     SmoothedValue<float> rnddurSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_35_granularSoundcloudAudioProcessor)

@@ -64,16 +64,16 @@ private:
 
     double currentSampleRate;
 
-    float *threshParameter = nullptr;
+    std::atomic<float> *threshParameter = nullptr;
     SmoothedValue<float> threshSmoothed;
 
-    float *risetimeParameter = nullptr;
+    std::atomic<float> *risetimeParameter = nullptr;
     SmoothedValue<float> risetimeSmoothed;
 
-    float *falltimeParameter = nullptr;
+    std::atomic<float> *falltimeParameter = nullptr;
     SmoothedValue<float> falltimeSmoothed;
 
-    float *lookaheadParameter = nullptr;
+    std::atomic<float> *lookaheadParameter = nullptr;
     SmoothedValue<float> lookaheadSmoothed;
 
     OnePoleLowpass lowpassFilter[2];

@@ -75,13 +75,13 @@ private:
     float gain1Increment;
     float gain2Increment;
 
-    float *timeParameter = nullptr;
+    std::atomic<float> *timeParameter = nullptr;
     SmoothedValue<float> timeSmoothed;
 
-    float *feedbackParameter = nullptr;
+    std::atomic<float> *feedbackParameter = nullptr;
     SmoothedValue<float> feedbackSmoothed;
 
-    float *balanceParameter = nullptr;
+    std::atomic<float> *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
     DelayLine delayLine[2];

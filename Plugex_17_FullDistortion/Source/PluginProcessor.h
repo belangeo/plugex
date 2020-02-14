@@ -63,22 +63,22 @@ private:
 
     double currentSampleRate;
 
-    float *highpassFreqParameter = nullptr;
+    std::atomic<float> *highpassFreqParameter = nullptr;
     SmoothedValue<float> highpassFreqSmoothed;
 
-    float *highpassQParameter = nullptr;
+    std::atomic<float> *highpassQParameter = nullptr;
     SmoothedValue<float> highpassQSmoothed;
 
-    float *driveParameter = nullptr;
+    std::atomic<float> *driveParameter = nullptr;
     SmoothedValue<float> driveSmoothed;
 
-    float *lowpassFreqParameter = nullptr;
+    std::atomic<float> *lowpassFreqParameter = nullptr;
     SmoothedValue<float> lowpassFreqSmoothed;
 
-    float *lowpassQParameter = nullptr;
+    std::atomic<float> *lowpassQParameter = nullptr;
     SmoothedValue<float> lowpassQSmoothed;
 
-    float *balanceParameter = nullptr;
+    std::atomic<float> *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
     Biquad highpassFilter[2];

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="SSymjl" name="Plugex32SpectralDelay" projectType="audioplug"
-              jucerVersion="5.4.5" pluginFormats="buildAU,buildVST,buildVST3"
+              jucerVersion="5.4.7" pluginFormats="buildAU,buildVST,buildVST3"
               headerPath="../../../common&#10;" pluginManufacturer="belangeo"
               companyName="belangeo">
   <MAINGROUP id="IAfKTv" name="Plugex32SpectralDelay">

@@ -88,7 +88,7 @@ PluginProcessor.h
 
     AudioProcessorValueTreeState parameters;
     
-    float *gainParameter = nullptr;
+    std::atomic<float> *gainParameter = nullptr;
 
 PluginProcessor.cpp
 -------------------
@@ -233,6 +233,8 @@ static float gainSliderTextToValue(const String& text) {
     parameters.push_back(std::make_unique<Parameter>(String("gain"), String("Gain"), String(),
                                                      NormalisableRange<float>(0.001f, 7.94f, 0.001f, 0.3f),
                                                      1.0f, gainSliderValueToText, gainSliderTextToValue));
+
+
 
 ==========================================================
 Remplacer une chaîne de caractères dans plusieurs fichiers

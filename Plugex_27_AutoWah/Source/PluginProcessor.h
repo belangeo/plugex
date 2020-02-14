@@ -64,13 +64,13 @@ private:
 
     double currentSampleRate;
 
-    float *responseParameter = nullptr;
+    std::atomic<float> *responseParameter = nullptr;
     SmoothedValue<float> responseSmoothed;
 
-    float *maxFreqParameter = nullptr;
+    std::atomic<float> *maxFreqParameter = nullptr;
     SmoothedValue<float> maxFreqSmoothed;
 
-    float *qParameter = nullptr;
+    std::atomic<float> *qParameter = nullptr;
     SmoothedValue<float> qSmoothed;
 
     OnePoleLowpass lowpassFilter[2];

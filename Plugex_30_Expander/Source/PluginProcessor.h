@@ -64,22 +64,22 @@ private:
     double currentSampleRate;
     float follower[2];
 
-    float *downthreshParameter = nullptr;
+    std::atomic<float> *downthreshParameter = nullptr;
     SmoothedValue<float> downthreshSmoothed;
 
-    float *upthreshParameter = nullptr;
+    std::atomic<float> *upthreshParameter = nullptr;
     SmoothedValue<float> upthreshSmoothed;
 
-    float *ratioParameter = nullptr;
+    std::atomic<float> *ratioParameter = nullptr;
     SmoothedValue<float> ratioSmoothed;
 
-    float *risetimeParameter = nullptr;
+    std::atomic<float> *risetimeParameter = nullptr;
     SmoothedValue<float> risetimeSmoothed;
 
-    float *falltimeParameter = nullptr;
+    std::atomic<float> *falltimeParameter = nullptr;
     SmoothedValue<float> falltimeSmoothed;
 
-    float *lookaheadParameter = nullptr;
+    std::atomic<float> *lookaheadParameter = nullptr;
     SmoothedValue<float> lookaheadSmoothed;
 
     DelayLine lookaheadDelay[2];

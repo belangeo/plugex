@@ -67,16 +67,16 @@ private:
     float dcFilterLastInput[2];
     float dcFilterLastOutput[2];
 
-    float *transpoParameter = nullptr;
+    std::atomic<float> *transpoParameter = nullptr;
     SmoothedValue<float> transpoSmoothed;
 
-    float *feedbackParameter = nullptr;
+    std::atomic<float> *feedbackParameter = nullptr;
     SmoothedValue<float> feedbackSmoothed;
 
-    float *winsizeParameter = nullptr;
+    std::atomic<float> *winsizeParameter = nullptr;
     SmoothedValue<float> winsizeSmoothed;
 
-    float *balanceParameter = nullptr;
+    std::atomic<float> *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
     DelayLine delayLine[2];

@@ -66,13 +66,13 @@ private:
 
     int writePosition;
 
-    float *timeParameter = nullptr;
+    std::atomic<float> *timeParameter = nullptr;
     SmoothedValue<float> timeSmoothed;
 
-    float *feedbackParameter = nullptr;
+    std::atomic<float> *feedbackParameter = nullptr;
     SmoothedValue<float> feedbackSmoothed;
 
-    float *balanceParameter = nullptr;
+    std::atomic<float> *balanceParameter = nullptr;
     SmoothedValue<float> balanceSmoothed;
 
     std::array<std::unique_ptr<float[]>, 2> delayLine;

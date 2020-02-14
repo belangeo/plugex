@@ -57,7 +57,7 @@ private:
     //==============================================================================
     AudioProcessorValueTreeState parameters;
 
-    float *gainParameter = nullptr;
+    std::atomic<float> *gainParameter = nullptr;
     SmoothedValue<float> gainSmoothed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Plugex_01_amplitudeLinearAudioProcessor)

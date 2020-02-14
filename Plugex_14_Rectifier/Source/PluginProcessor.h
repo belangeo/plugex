@@ -63,10 +63,10 @@ private:
 
     double currentSampleRate;
 
-    float *percentParameter = nullptr;
+    std::atomic<float> *percentParameter = nullptr;
     SmoothedValue<float> percentSmoothed;
 
-    float *cutoffParameter = nullptr;
+    std::atomic<float> *cutoffParameter = nullptr;
     SmoothedValue<float> cutoffSmoothed;
 
     OnePoleLowpass lowpassFilter[2];

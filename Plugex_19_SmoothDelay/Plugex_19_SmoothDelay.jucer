@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="l3Q60j" name="Plugex19SmoothDelay" projectType="audioplug"
-              jucerVersion="5.4.5" pluginFormats="buildAU,buildVST,buildVST3"
+              jucerVersion="5.4.7" pluginFormats="buildAU,buildVST,buildVST3"
               headerPath="../../../common" companyName="belangeo">
   <MAINGROUP id="vdJK2N" name="Plugex19SmoothDelay">
     <GROUP id="{71BCC0A7-2DE4-54A7-E823-CE7ACA1A9AAB}" name="Source">
