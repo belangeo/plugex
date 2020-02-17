@@ -129,7 +129,7 @@ AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
                                                      0.25f, secondSliderValueToText, secondSliderTextToValue));
 
     parameters.push_back(std::make_unique<Parameter>(String("type"), String("Type"), String(),
-                                                     NormalisableRange<float>(0.0f, 5.0f, 1.f, 1.0f),
+                                                     NormalisableRange<float>(0.0f, 7.0f, 1.f, 1.0f),
                                                      0.0f, nullptr, nullptr));
 
     parameters.push_back(std::make_unique<Parameter>(String("sharp"), String("Sharp"), String(),

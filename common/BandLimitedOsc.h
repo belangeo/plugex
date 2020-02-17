@@ -32,7 +32,8 @@ class BandLimitedOsc {
         float m_srOverEight;
 
         // parameters
-        // 0 = Sine, 1 = Triangle, 2 = Square, 3 = Saw, 4 = Ramp, 5 = SAH
+        // 0 = Sine, 1 = Triangle, 2 = Square, 3 = Saw,
+        // 4 = Ramp, 5 = pulse, 6 = bi-pulse, 7 = SAH
         int m_wavetype;
         float m_freq;
         float m_sharp;

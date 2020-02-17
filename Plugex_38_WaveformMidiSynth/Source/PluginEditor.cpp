@@ -77,7 +77,7 @@ Plugex_38_waveformMidiSynthAudioProcessorEditor::Plugex_38_waveformMidiSynthAudi
     addAndMakeVisible(&typeLabel);
 
     typeCombo.setLookAndFeel(&plugexLookAndFeel);
-    typeCombo.addItemList({"Sine", "Triangle", "Square", "Sawtooth", "Ramp", "SampleAndHold"}, 1);
+    typeCombo.addItemList({"Sine", "Triangle", "Square", "Sawtooth", "Ramp", "Pulse", "Bipolar Pulse", "SampleAndHold"}, 1);
     typeCombo.setSelectedId(1);
     addAndMakeVisible(&typeCombo);
 
