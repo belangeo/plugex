@@ -46,7 +46,7 @@ void Granulator::setup(double sampleRate, double memorySize) {
     data.reset( new float[maxSize + 1] );
     std::fill(data.get(), data.get() + maxSize + 1, 0.f);
 
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
     gpos.resize(maxNumberOfGrains, 0.f);
     glen.resize(maxNumberOfGrains, 0.f);
     ginc.resize(maxNumberOfGrains, 0.f);

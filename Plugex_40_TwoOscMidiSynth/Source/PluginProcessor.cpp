@@ -358,7 +358,7 @@ static float secondSliderTextToValue(const String& text) {
 }
 
 static String sharpSliderValueToText(float value) {
-    return String(value, 4) + String(" x");
+    return String(value, 3) + String(" x");
 }
 
 static float sharpSliderTextToValue(const String& text) {

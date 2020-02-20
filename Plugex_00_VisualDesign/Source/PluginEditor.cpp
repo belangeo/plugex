@@ -99,7 +99,6 @@ void Plugex_00_visualDesignAudioProcessorEditor::paint (Graphics& g)
 void Plugex_00_visualDesignAudioProcessorEditor::resized()
 {
     int width = getWidth();
-    int height = getHeight();
 
     auto area = getLocalBounds().reduced(12, 12);
 

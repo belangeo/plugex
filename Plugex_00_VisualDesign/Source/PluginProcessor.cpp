@@ -139,12 +139,6 @@ void Plugex_00_visualDesignAudioProcessor::processBlock (AudioBuffer<float>& buf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
 }
 
 //==============================================================================
