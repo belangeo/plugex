@@ -155,7 +155,7 @@ float BandLimitedOsc::process() {
                 m_sah_current_value = (rand() / (float)RAND_MAX) * 2.f - 1.f;
             }
             if (m_sah_pointer_pos < 1.f) {
-                fade = 0.5f * sinf(M_PI * (m_sah_pointer_pos + 0.5f)) + 0.f;
+                fade = 0.5f * sinf(M_PI * (m_sah_pointer_pos + 0.5f)) + 0.5f;
                 value = m_sah_current_value + (m_sah_last_value - m_sah_current_value) * fade;
                 m_sah_pointer_pos += inc2;
             }
