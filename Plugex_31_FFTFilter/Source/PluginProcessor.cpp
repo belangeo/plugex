@@ -65,7 +65,7 @@ Plugex_31_fftFilterAudioProcessor::Plugex_31_fftFilterAudioProcessor()
     parameters.state.addChild(filterNode, -1, nullptr);
 
     for (auto channel = 0; channel < 2; channel++) {
-        fftEngine[channel].setup(lastOrder, 1 << lastOverlaps, lastWintype);
+        fftEngine[channel].setup(lastOrder, lastOverlaps, lastWintype);
         fftEngine[channel].addListener(this);
     }
 
@@ -226,7 +226,8 @@ void Plugex_31_fftFilterAudioProcessor::processBlock (AudioBuffer<float>& buffer
         if (order != lastOrder || overlaps != lastOverlaps) {
             fftEngine[channel].setup(order, overlaps, wintype);
             computeFFTFilter();
-        } else if (wintype != lastWintype) {
+        }
+        if (wintype != lastWintype) {
             fftEngine[channel].setWintype(wintype);
         }
         auto *channelData = buffer.getWritePointer(channel);

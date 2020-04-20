@@ -71,7 +71,7 @@ Plugex_32_spectralDelayAudioProcessor::Plugex_32_spectralDelayAudioProcessor()
     parameters.state.addChild(feedbackNode, -1, nullptr);
 
     for (auto channel = 0; channel < 2; channel++) {
-        fftEngine[channel].setup(lastOrder, 1 << lastOverlaps, lastWintype);
+        fftEngine[channel].setup(lastOrder, lastOverlaps, lastWintype);
         fftEngine[channel].addListener(this);
     }
 
@@ -195,6 +195,9 @@ void Plugex_32_spectralDelayAudioProcessor::resizeBuffers(int order, int overlap
     int hopsize = fftSize / overlaps;
     currentNumberOfFrames = (int)(maxDelayTimeInSeconds * currentSampleRate / hopsize + 0.5f);
     sampleBuffers[0].resize(currentNumberOfFrames * fftSize);
+    sampleBuffers[0].fill(0.0f);
+    sampleBuffers[1].resize(currentNumberOfFrames * fftSize);
+    sampleBuffers[1].fill(0.0f);
     frameCount[0] = frameCount[1] = 0;
 }
 
@@ -284,7 +287,8 @@ void Plugex_32_spectralDelayAudioProcessor::processBlock (AudioBuffer<float>& bu
     for (auto channel = 0; channel < totalNumInputChannels; channel++) {
         if (order != lastOrder || overlaps != lastOverlaps) {
             fftEngine[channel].setup(order, overlaps, wintype);
-        } else if (wintype != lastWintype) {
+        }
+        if (wintype != lastWintype) {
             fftEngine[channel].setWintype(wintype);
         }
         auto *channelData = buffer.getWritePointer(channel);
